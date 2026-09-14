@@ -57,32 +57,7 @@ internal static class UiSmoke
         checks.Add("All four views render at 100%,150%,200% with actual PNG sprites.");
         host.Main.Width = host.Main.MinWidth; host.Main.Height = host.Main.MinHeight;
         host.Main.Navigate("Home"); Render(host.Main, output, "home-minimum", 1);
-        var atlas = new System.Windows.Controls.Primitives.UniformGrid { Columns = 9, Width = 1152, Height = 450, Background = new SolidColorBrush(Color.FromRgb(255, 245, 249)) };
-        for (int stage = 1; stage <= 3; stage++)
-        foreach (var definition in CharacterCatalog.All)
-        {
-            var source = Path.Combine(AppContext.BaseDirectory, "Assets", "Characters", $"{definition.Id}-{stage}.png");
-            if (!File.Exists(source)) throw new InvalidDataException("Missing character asset: " + source);
-            var bitmap = BitmapFrame.Create(new Uri(source), BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
-            if (bitmap.Format.BitsPerPixel < 32) throw new InvalidDataException("Character has no alpha channel: " + source);
-            if (bitmap.PixelWidth != bitmap.PixelHeight * 2) throw new InvalidDataException("Expected two horizontal expression frames: " + source);
-            var rgba = new FormatConvertedBitmap(bitmap, PixelFormats.Bgra32, null, 0);
-            var pixels = new byte[rgba.PixelWidth * rgba.PixelHeight * 4];
-            rgba.CopyPixels(pixels, rgba.PixelWidth * 4, 0);
-            if (pixels[3] != 0 || pixels[rgba.PixelWidth * 4 - 1] != 0 || pixels[^1] != 0)
-                throw new InvalidDataException("Character corners must be transparent: " + source);
-            var sprite = new SpriteView { Width = 96, Height = 96 };
-            sprite.ShowCharacter(definition.Id, stage);
-            sprite.Measure(new Size(96, 96)); sprite.Arrange(new Rect(0, 0, 96, 96)); sprite.UpdateLayout();
-            SaveVisual(sprite, 96, 96, 1, Path.Combine(output, $"{definition.Id}-{stage}-96.png"));
-            var cell = new StackPanel { Margin = new Thickness(4, 12, 4, 4) };
-            cell.Children.Add(sprite);
-            cell.Children.Add(new TextBlock { Text = $"{definition.Name} · {stage}단계", FontFamily = new FontFamily("Malgun Gothic"), FontSize = 12, Foreground = new SolidColorBrush(Color.FromRgb(108, 71, 89)), HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 8, 0, 0) });
-            atlas.Children.Add(cell);
-        }
-        atlas.Measure(new Size(1152, 450)); atlas.Arrange(new Rect(0, 0, 1152, 450)); atlas.UpdateLayout();
-        SaveVisual(atlas, 1152, 450, 1, Path.Combine(output, "all-characters.png"));
-        checks.Add("All27 PNG assets contain two expression frames, transparent corners, and render at96DIP.");
+        VerifySprites(output, checks);
         var backup = Path.Combine(output, "roundtrip.zip");
         manager.Backup(backup);
         double before = manager.TotalSeconds;
@@ -91,6 +66,105 @@ internal static class UiSmoke
         checks.Add("UI backing state persists and roundtrips backup after7 unique draws.");
         File.WriteAllText(Path.Combine(output, "result.json"), JsonSerializer.Serialize(new { success = true, checks, manager.DataDirectory, totalSeconds = manager.TotalSeconds }, new JsonSerializerOptions { WriteIndented = true }));
     }
+
+    private static void VerifySprites(string output, List<string> checks)
+    {
+        var directory = Path.Combine(AppContext.BaseDirectory, "Assets", "Characters");
+        using var manifest = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory, "assets-manifest.json")));
+        if (manifest.RootElement.GetProperty("schemaVersion").GetInt32() != 2)
+            throw new InvalidDataException("The character manifest must use schema version 2.");
+        var entries = manifest.RootElement.GetProperty("assets").EnumerateArray().ToList();
+        var ids = entries.Select(entry => entry.GetProperty("id").GetString()).ToList();
+        if (!ids.Order().SequenceEqual(CharacterCatalog.All.Select(character => character.Id).Order()))
+            throw new InvalidDataException("The character manifest must contain exactly one sprite sheet for every catalog ID.");
+
+        foreach (var definition in CharacterCatalog.All)
+        {
+            var entry = entries.Single(asset => asset.GetProperty("id").GetString() == definition.Id);
+            var filename = entry.GetProperty("filename").GetString();
+            if (filename != definition.Id + ".png" || entry.GetProperty("columns").GetInt32() != SpriteSheet.Columns ||
+                entry.GetProperty("rows").GetInt32() != SpriteSheet.Stages || entry.GetProperty("stages").GetInt32() != SpriteSheet.Stages ||
+                entry.GetProperty("framesPerStage").GetInt32() != SpriteSheet.Columns)
+                throw new InvalidDataException("Invalid sprite sheet manifest layout: " + definition.Id);
+            var source = SpriteSheet.PathFor(definition.Id);
+            var bitmap = SpriteSheet.Load(source) ?? throw new InvalidDataException("Missing character asset: " + source);
+            if (bitmap.Format.BitsPerPixel < 32) throw new InvalidDataException("Character has no alpha channel: " + source);
+            if (entry.GetProperty("width").GetInt32() != bitmap.PixelWidth || entry.GetProperty("height").GetInt32() != bitmap.PixelHeight ||
+                entry.GetProperty("frameWidth").GetInt32() != bitmap.PixelWidth / SpriteSheet.Columns ||
+                entry.GetProperty("frameHeight").GetInt32() != bitmap.PixelHeight / SpriteSheet.Stages)
+                throw new InvalidDataException("Sprite dimensions differ from the manifest: " + source);
+
+            var stageFrames = new List<byte[]>();
+            for (var stage = 1; stage <= SpriteSheet.Stages; stage++)
+            {
+                var open = VerifyFrame(SpriteSheet.GridFrame(source, stage, false), $"{definition.Id}, stage {stage}, open");
+                var blink = VerifyFrame(SpriteSheet.GridFrame(source, stage, true), $"{definition.Id}, stage {stage}, blink");
+                if (open.AsSpan().SequenceEqual(blink)) throw new InvalidDataException($"Blink expression is identical: {definition.Id}, stage {stage}");
+                if (stageFrames.Any(previous => previous.AsSpan().SequenceEqual(open)))
+                    throw new InvalidDataException($"Growth appearance repeats an earlier stage: {definition.Id}, stage {stage}");
+                stageFrames.Add(open);
+            }
+        }
+
+        const int columns = 6, cellWidth = 160, cellHeight = 150;
+        int width = columns * cellWidth;
+        int height = (int)Math.Ceiling(CharacterCatalog.All.Count * SpriteSheet.Stages / (double)columns) * cellHeight;
+        foreach (var blink in new[] { false, true })
+        {
+            var atlas = new System.Windows.Controls.Primitives.UniformGrid
+            {
+                Columns = columns, Width = width, Height = height,
+                Background = new SolidColorBrush(Color.FromRgb(255, 245, 249))
+            };
+            foreach (var definition in CharacterCatalog.All)
+            for (int stage = 1; stage <= SpriteSheet.Stages; stage++)
+            {
+                var sprite = new SpriteView { Width = 96, Height = 96 };
+                sprite.ShowCharacter(definition.Id, stage);
+                sprite.ShowExpression(blink);
+                sprite.Measure(new Size(96, 96)); sprite.Arrange(new Rect(0, 0, 96, 96)); sprite.UpdateLayout();
+                var suffix = blink ? "-blink" : "";
+                SaveVisual(sprite, 96, 96, 1, Path.Combine(output, $"{definition.Id}-{stage}{suffix}-96.png"));
+                var cell = new StackPanel { Margin = new Thickness(4, 12, 4, 4) };
+                cell.Children.Add(sprite);
+                cell.Children.Add(new TextBlock
+                {
+                    Text = $"{definition.Name} · {stage}단계", FontFamily = new FontFamily("Malgun Gothic"), FontSize = 12,
+                    Foreground = new SolidColorBrush(Color.FromRgb(108, 71, 89)), HorizontalAlignment = HorizontalAlignment.Center,
+                    Margin = new Thickness(0, 8, 0, 0)
+                });
+                atlas.Children.Add(cell);
+            }
+            atlas.Measure(new Size(width, height)); atlas.Arrange(new Rect(0, 0, width, height)); atlas.UpdateLayout();
+            SaveVisual(atlas, width, height, 1, Path.Combine(output, blink ? "all-characters-blink.png" : "all-characters.png"));
+        }
+        checks.Add($"All {CharacterCatalog.All.Count} sprite sheets match the catalog and manifest, with {CharacterCatalog.All.Count * SpriteSheet.Stages} distinct growth appearances and {CharacterCatalog.All.Count * SpriteSheet.Stages * SpriteSheet.Columns} nonempty transparent expression frames rendered at 96 DIP.");
+    }
+
+    private static byte[] VerifyFrame(BitmapSource bitmap, string name)
+    {
+        var rgba = new FormatConvertedBitmap(bitmap, PixelFormats.Bgra32, null, 0);
+        int stride = rgba.PixelWidth * 4;
+        var pixels = new byte[stride * rgba.PixelHeight];
+        rgba.CopyPixels(pixels, stride, 0);
+        // A few generated alpha values round to 1/255. Check the full border for visible
+        // content, allowing only that quantization residue while preserving the source PNG.
+        for (var x = 0; x < rgba.PixelWidth; x++)
+            if (pixels[x * 4 + 3] > 1 || pixels[(rgba.PixelHeight - 1) * stride + x * 4 + 3] > 1)
+                throw new InvalidDataException("Character content touches a horizontal expression-cell border: " + name);
+        for (var y = 0; y < rgba.PixelHeight; y++)
+            if (pixels[y * stride + 3] > 1 || pixels[y * stride + stride - 1] > 1)
+                throw new InvalidDataException("Character content touches a vertical expression-cell border: " + name);
+        var visiblePixels = 0;
+        for (var offset = 0; offset < pixels.Length; offset += 4)
+        {
+            if (pixels[offset + 3] > 1) visiblePixels++;
+            else pixels.AsSpan(offset, 4).Clear(); // Hidden RGB and quantization residue cannot make expressions pass.
+        }
+        if (visiblePixels == 0) throw new InvalidDataException("Expression cell is empty: " + name);
+        return pixels;
+    }
+
     private static void VerifyIcon(MainWindow window, List<string> checks, string output)
     {
         var decoder = BitmapDecoder.Create(AppIcon.ResourceUri, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);

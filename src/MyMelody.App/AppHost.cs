@@ -122,7 +122,7 @@ public sealed class AppHost : IDisposable
             if (_growthSignature != null && signature != _growthSignature && growing != null && _growthCharacterId == growing.Id)
             {
                 Main.Toast(growing.IsComplete
-                    ? Manager.State.CanDraw ? "36시간을 함께했어요! 다음 친구를 만날 수 있어요 ♡" : "아홉 친구와 모든 이야기를 완성했어요 ♡"
+                    ? Manager.State.CanDraw ? "36시간을 함께했어요! 다음 친구를 만날 수 있어요 ♡" : "모든 친구와 이야기를 완성했어요 ♡"
                     : $"새로운 모습으로 자랐어요! {growing.Stage}단계 ♡");
                 Main.Celebrate(); Pet.Celebrate();
                 if (Manager.Settings.SoundEnabled) System.Media.SystemSounds.Asterisk.Play();

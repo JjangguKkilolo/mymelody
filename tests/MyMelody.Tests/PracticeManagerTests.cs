@@ -48,18 +48,18 @@ public sealed class PracticeManagerTests : IDisposable
     }
 
     [Fact]
-    public void NineDrawsAreUniqueAndThenCollectionEnds()
+    public void EveryCatalogCharacterCanBeDrawnOnceAndThenCollectionEnds()
     {
         using var manager = Create();
         var ids = new HashSet<string>();
         manager.StartManual();
-        for (int i = 0; i < 9; i++)
+        for (int i = 0; i < CharacterCatalog.All.Count; i++)
         {
             var character = manager.Draw();
             Assert.True(ids.Add(character.Id));
             Advance(manager, GrowthRules.CompletionSeconds);
         }
-        Assert.Equal(9, ids.Count);
+        Assert.Equal(CharacterCatalog.All.Count, ids.Count);
         Assert.False(manager.State.CanDraw);
         Assert.Throws<InvalidOperationException>(() => manager.Draw());
         double previous = manager.TotalSeconds;

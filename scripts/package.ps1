@@ -39,11 +39,24 @@ try {
     }
     $sourceAssets = Join-Path $workspaceRoot 'src/MyMelody.App/Assets'
     $publishedAssets = Join-Path $publishPath 'Assets'
-    foreach ($character in @('ribbon', 'piano', 'strawberry', 'pajamas', 'garden', 'baking', 'reading', 'rain', 'starry')) {
-        foreach ($stage in 1..3) {
-            if (!(Test-Path -LiteralPath (Join-Path $publishedAssets "Characters/$character-$stage.png"))) {
-                throw "Character sprite is missing: $character stage $stage"
-            }
+    $manifestPath = Join-Path $publishedAssets 'Characters/assets-manifest.json'
+    if (!(Test-Path -LiteralPath $manifestPath)) { throw 'Character asset manifest is missing.' }
+    $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+    if ($manifest.schemaVersion -ne 2 -or !$manifest.assets -or @($manifest.assets).Count -eq 0) {
+        throw 'Expected character asset manifest schema version 2 with sprite sheets.'
+    }
+    $seenIds = [Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    foreach ($asset in $manifest.assets) {
+        if ($asset.id -notmatch '^[a-z][a-z0-9-]*$' -or !$seenIds.Add([string]$asset.id) -or $asset.filename -cne "$($asset.id).png") {
+            throw "Invalid or duplicate character asset ID or file name: $($asset.id)"
+        }
+        if ($asset.columns -ne 2 -or $asset.rows -ne 3 -or $asset.stages -ne 3 -or $asset.framesPerStage -ne 2 -or
+            $asset.frameWidth -le 0 -or $asset.frameWidth -ne $asset.frameHeight -or
+            $asset.width -ne $asset.frameWidth * $asset.columns -or $asset.height -ne $asset.frameHeight * $asset.rows) {
+            throw "Expected a 2-column, 3-row sprite sheet with square cells: $($asset.id)"
+        }
+        if (!(Test-Path -LiteralPath (Join-Path $publishedAssets "Characters/$($asset.filename)"))) {
+            throw "Character sprite sheet is missing: $($asset.filename)"
         }
     }
     Get-ChildItem -LiteralPath $sourceAssets -Recurse -File | Where-Object { $_.Extension -in @('.png', '.json') } | ForEach-Object {

@@ -22,7 +22,7 @@ jobs:
       - name: Build application
         shell: pwsh
         run: dotnet build src/MyMelody.App/MyMelody.App.csproj -c Release --nologo
-      - name: Render all views and validate 27 animated character sheets
+      - name: Render all views and validate every character and expression
         shell: pwsh
         run: ./scripts/verify-ui.ps1 -Exe src/MyMelody.App/bin/Release/net10.0-windows/MyMelodyPractice.exe -OutputDirectory artifacts/ci-ui
       - name: Run all test projects

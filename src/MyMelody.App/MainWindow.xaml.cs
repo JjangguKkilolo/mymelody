@@ -51,7 +51,7 @@ public partial class MainWindow : Window
         foreach (var button in new[] { HomeNav, CollectionNav, RecordsNav, SettingsNav })
             button.Background = (string)button.Tag == page ? Brush("#F8DCE7") : Brushes.Transparent;
         PageTitle.Text = page switch { "Collection" => "우리의 작은 컬렉션", "Records" => "차곡차곡, 연습의 기록", "Settings" => "나에게 맞는 연습 공간", _ => "오늘도, 조금씩 함께 자라요" };
-        PageEyebrow.Text = page switch { "Collection" => "NINE LITTLE STORIES", "Records" => "EVERY LITTLE PRACTICE COUNTS", "Settings" => "MAKE YOURSELF AT HOME", _ => "OUR LITTLE PRACTICE ROOM" };
+        PageEyebrow.Text = page switch { "Collection" => "OUR LITTLE STORIES", "Records" => "EVERY LITTLE PRACTICE COUNTS", "Settings" => "MAKE YOURSELF AT HOME", _ => "OUR LITTLE PRACTICE ROOM" };
         if (page == "Collection") RefreshCollection(true);
         if (page == "Records") RefreshRecords();
     }
@@ -70,7 +70,7 @@ public partial class MainWindow : Window
         DrawButton.Content = Manager.State.Characters.Count == 0 ? "♡  첫 친구 만나기" : "♡  새로운 친구 만나기";
         TodayTotal.Text = Duration(Manager.TodaySeconds);
         WeekTotal.Text = Duration(Manager.WeekSeconds);
-        CollectedTotal.Text = $"{Manager.State.Characters.Count} / 9";
+        CollectedTotal.Text = $"{Manager.State.Characters.Count} / {CharacterCatalog.All.Count}";
         SidebarStatus.Text = Manager.IsPracticing ? "♪ 지금 함께 연습하는 중" : Manager.IsPaused ? "잠시 쉬어 가는 중" : "작은 시작을 기다려요";
         PracticeStatus.Text = Manager.IsPaused ? "연습 기록을 잠시 멈췄어요" : Manager.IsManual ? "수동 연습을 기록하고 있어요" : Manager.IsPracticing ? "♪ 연습 시간이 쌓이고 있어요" : "연습을 기다리고 있어요";
         PracticeHint.Text = Manager.IsManual ? "악보 읽기나 음악 공부도 함께 기록해요." : Manager.IsPaused ? "재개한 뒤 새 건반 입력부터 다시 기록해요." : "건반 입력이 30초 동안 없으면 자동으로 쉬어 가요.";

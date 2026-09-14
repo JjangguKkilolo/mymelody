@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MyMelody.App;
@@ -12,11 +13,11 @@ internal static class SpriteSheet
 
     internal static string PathFor(string id) => Path.Combine(AppContext.BaseDirectory, "Assets", "Characters", $"{id}.png");
 
-    internal static BitmapSource? Frame(string id, int stage, bool blink)
+    internal static ImageSource? Frame(string id, int stage, bool blink)
     {
         if (stage is < 1 or > Stages) throw new ArgumentOutOfRangeException(nameof(stage));
         var path = PathFor(id);
-        if (File.Exists(path)) return GridFrame(path, stage, blink);
+        if (File.Exists(path)) return SpritePresentation.Frame(id, stage, blink);
 
         // Old development output can still be opened while the new artwork is being prepared.
         var legacy = Path.Combine(AppContext.BaseDirectory, "Assets", "Characters", $"{id}-{stage}.png");

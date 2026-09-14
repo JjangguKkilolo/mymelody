@@ -30,6 +30,8 @@ Windows x64용이며 .NET 런타임은 앱에 포함됩니다. Cakewalk와 동�
 
 기존 9종은 업데이트 후 새 외형으로 표시되며 수집 상태·성장 단계·연습 기록은 유지됩니다. 9종을 모두 완성했다면 추가된 양·계란을 이어서 만날 수 있습니다.
 
+모든 친구는 투명 여백을 제외한 외형의 높이와 바닥선을 맞춰 표시합니다. 귀·의상·소품의 비율을 유지하며, 눈을 깜빡일 때도 같은 배율로 표시합니다.
+
 ![11종의 세 단계 모습](docs/screenshots/characters.png)
 
 ## 기록과 사용 편의
@@ -62,7 +64,7 @@ dotnet run --project src/MyMelody.App
 저장소 안에 SDK를 따로 준비했다면 `dotnet` 대신 `.\.tooling\dotnet\dotnet.exe`를 사용합니다.
 
 ```powershell
-./scripts/package.ps1 -Version 1.1.0
+./scripts/package.ps1 -Version 1.1.1
 ```
 
 `vMAJOR.MINOR.PATCH` 태그를 push하면 GitHub Actions가 테스트·빌드·패키징 후 모든 파일을 릴리스 초안에 업로드하고 게시합니다. 설치형·포터블·업데이트 패키지와 체크섬 파일이 포함됩니다.

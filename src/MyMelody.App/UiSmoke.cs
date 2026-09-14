@@ -58,6 +58,7 @@ internal static class UiSmoke
         host.Main.Width = host.Main.MinWidth; host.Main.Height = host.Main.MinHeight;
         host.Main.Navigate("Home"); Render(host.Main, output, "home-minimum", 1);
         VerifySprites(output, checks);
+        VerifyUniformSpriteSizes(output, checks);
         var backup = Path.Combine(output, "roundtrip.zip");
         manager.Backup(backup);
         double before = manager.TotalSeconds;
@@ -165,6 +166,101 @@ internal static class UiSmoke
         return pixels;
     }
 
+    private sealed record SpriteSizeMeasurement(string Id, int Stage, bool Blink, int DipSize, double Scale,
+        int PixelSize, int Left, int Top, int Right, int Bottom)
+    {
+        public int VisibleWidth => Right - Left + 1;
+        public int VisibleHeight => Bottom - Top + 1;
+        public double CenterX => (Left + Right) / 2.0;
+    }
+
+    private sealed record SpriteSizeSummary(int DipSize, double Scale, int Samples,
+        int MinimumHeight, int MaximumHeight, int MinimumBottom, int MaximumBottom,
+        int MaximumBlinkHeightDelta, int MaximumBlinkBottomDelta, double MaximumBlinkCenterDelta);
+
+    private static void VerifyUniformSpriteSizes(string output, List<string> checks)
+    {
+        const int heightTolerance = 2, baselineTolerance = 1;
+        const double centerTolerance = 1;
+        var measurements = new List<SpriteSizeMeasurement>();
+        var summaries = new List<SpriteSizeSummary>();
+        var failures = new List<string>();
+        foreach (var (size, scale) in new[] { (96, 1.0), (96, 1.5), (96, 2.0), (48, 1.0), (384, 1.0) })
+        {
+            var group = new List<SpriteSizeMeasurement>();
+            int blinkHeightDelta = 0, blinkBottomDelta = 0;
+            double blinkCenterDelta = 0;
+            foreach (var definition in CharacterCatalog.All)
+            for (int stage = 1; stage <= SpriteSheet.Stages; stage++)
+            {
+                var sprite = new SpriteView { Width = size, Height = size };
+                sprite.ShowCharacter(definition.Id, stage);
+                sprite.Measure(new Size(size, size)); sprite.Arrange(new Rect(0, 0, size, size)); sprite.UpdateLayout();
+                SpriteSizeMeasurement? open = null;
+                foreach (var blink in new[] { false, true })
+                {
+                    sprite.ShowExpression(blink); sprite.UpdateLayout();
+                    var bitmap = RenderVisualBitmap(sprite, size, size, scale);
+                    var measurement = MeasureSprite(bitmap, definition.Id, stage, blink, size, scale);
+                    group.Add(measurement); measurements.Add(measurement);
+                    if (measurement.Left <= 0 || measurement.Top <= 0 || measurement.Right >= bitmap.PixelWidth - 1 || measurement.Bottom >= bitmap.PixelHeight - 1)
+                        failures.Add($"Clipped silhouette: {definition.Id} stage {stage}, blink={blink}, {size} DIP at {scale * 100:0}%.");
+                    if (!blink) open = measurement;
+                    else
+                    {
+                        int heightDelta = Math.Abs(measurement.VisibleHeight - open!.VisibleHeight);
+                        int bottomDelta = Math.Abs(measurement.Bottom - open.Bottom);
+                        double centerDelta = Math.Abs(measurement.CenterX - open.CenterX);
+                        blinkHeightDelta = Math.Max(blinkHeightDelta, heightDelta);
+                        blinkBottomDelta = Math.Max(blinkBottomDelta, bottomDelta);
+                        blinkCenterDelta = Math.Max(blinkCenterDelta, centerDelta);
+                        if (heightDelta > heightTolerance || bottomDelta > baselineTolerance || centerDelta > centerTolerance)
+                            failures.Add($"Blink moved or resized {definition.Id} stage {stage} at {size} DIP / {scale * 100:0}%: height delta {heightDelta} px, bottom delta {bottomDelta} px, center delta {centerDelta:0.0} px.");
+                    }
+                }
+            }
+            var summary = new SpriteSizeSummary(size, scale, group.Count,
+                group.Min(item => item.VisibleHeight), group.Max(item => item.VisibleHeight),
+                group.Min(item => item.Bottom), group.Max(item => item.Bottom),
+                blinkHeightDelta, blinkBottomDelta, blinkCenterDelta);
+            summaries.Add(summary);
+            if (summary.MaximumHeight - summary.MinimumHeight > heightTolerance)
+                failures.Add($"Unequal character heights at {size} DIP / {scale * 100:0}%: {summary.MinimumHeight}–{summary.MaximumHeight} physical pixels.");
+            if (summary.MaximumBottom - summary.MinimumBottom > baselineTolerance)
+                failures.Add($"Unequal character baselines at {size} DIP / {scale * 100:0}%: y={summary.MinimumBottom}–{summary.MaximumBottom} physical pixels.");
+        }
+        var dpiMeasurements = measurements.Where(item => item.DipSize == 96).ToList();
+        double minimumDipHeight = dpiMeasurements.Min(item => item.VisibleHeight / item.Scale);
+        double maximumDipHeight = dpiMeasurements.Max(item => item.VisibleHeight / item.Scale);
+        if (maximumDipHeight - minimumDipHeight > heightTolerance)
+            failures.Add($"DPI changed the logical visible height: {minimumDipHeight:0.00}–{maximumDipHeight:0.00} DIP.");
+        File.WriteAllText(Path.Combine(output, "size-checks.json"), JsonSerializer.Serialize(new
+        {
+            success = failures.Count == 0, alphaThreshold = 16,
+            tolerancesInPhysicalPixels = new { height = heightTolerance, baseline = baselineTolerance, blinkCenter = centerTolerance },
+            configurations = summaries, minimumDipHeight, maximumDipHeight, measurements, failures
+        }, new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+        if (failures.Count != 0)
+            throw new InvalidDataException("Character size regression; see size-checks.json. " + string.Join(" ", failures.Take(5)));
+        checks.Add($"All {CharacterCatalog.All.Count * SpriteSheet.Stages * SpriteSheet.Columns} actual sprite expressions retain uniform visible height, a common baseline, and stable blink alignment at 96 DIP with 100/150/200% DPI and at 48/384 DIP; geometry differs by at most 2 physical pixels for height and 1 for baseline or blink center.");
+    }
+
+    private static SpriteSizeMeasurement MeasureSprite(BitmapSource bitmap, string id, int stage, bool blink, int dipSize, double scale)
+    {
+        var pixels = new byte[bitmap.PixelWidth * bitmap.PixelHeight * 4];
+        bitmap.CopyPixels(pixels, bitmap.PixelWidth * 4, 0);
+        int left = bitmap.PixelWidth, top = bitmap.PixelHeight, right = -1, bottom = -1;
+        for (int y = 0, offset = 3; y < bitmap.PixelHeight; y++)
+        for (int x = 0; x < bitmap.PixelWidth; x++, offset += 4)
+        {
+            if (pixels[offset] < 16) continue;
+            left = Math.Min(left, x); right = Math.Max(right, x);
+            top = Math.Min(top, y); bottom = Math.Max(bottom, y);
+        }
+        if (right < left) throw new InvalidDataException($"Rendered sprite is empty: {id}, stage {stage}, blink={blink}.");
+        return new(id, stage, blink, dipSize, scale, bitmap.PixelWidth, left, top, right, bottom);
+    }
+
     private static void VerifyIcon(MainWindow window, List<string> checks, string output)
     {
         var decoder = BitmapDecoder.Create(AppIcon.ResourceUri, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
@@ -226,9 +322,14 @@ internal static class UiSmoke
     }
     private static void SaveVisual(Visual visual, double width, double height, double scale, string path)
     {
-        var target = new RenderTargetBitmap((int)Math.Ceiling(width * scale), (int)Math.Ceiling(height * scale), 96 * scale, 96 * scale, PixelFormats.Pbgra32);
-        target.Render(visual);
+        var target = RenderVisualBitmap(visual, width, height, scale);
         var encoder = new PngBitmapEncoder(); encoder.Frames.Add(BitmapFrame.Create(target));
         using var stream = File.Create(path); encoder.Save(stream);
+    }
+    private static RenderTargetBitmap RenderVisualBitmap(Visual visual, double width, double height, double scale)
+    {
+        var target = new RenderTargetBitmap((int)Math.Ceiling(width * scale), (int)Math.Ceiling(height * scale), 96 * scale, 96 * scale, PixelFormats.Pbgra32);
+        target.Render(visual);
+        return target;
     }
 }

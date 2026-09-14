@@ -8,7 +8,7 @@ MIDI 건반을 연습하면 함께 자라는 작은 Windows 데스크톱 친구�
 
 ## 시작하기
 
-[최신 릴리스](https://github.com/JjangguKkilolo/mymelody/releases/latest)에서 `Setup.exe` 또는 `Portable.zip`을 받습니다. 포터블은 ZIP을 폴더 전체로 풀고 `MyMelodyPractice.exe`를 실행하세요.
+[최신 릴리스](https://github.com/JjangguKkilolo/mymelody/releases/latest)에서 `MyMelodyPractice-win-Setup.exe` 또는 `MyMelodyPractice-win-Portable.zip`을 받습니다. 포터블은 ZIP을 폴더 전체로 풀고 **마이멜로디 연습 친구.exe**를 실행하세요.
 
 1. **첫 친구 만나기**를 눌러 마이멜로디를 뽑습니다.
 2. **설정 → 연습 입력**에서 사용하는 MIDI 건반을 선택합니다.

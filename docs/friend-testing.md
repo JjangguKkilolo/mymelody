@@ -2,7 +2,7 @@
 
 Windows PC와 MIDI 건반, Cakewalk가 있으면 아래 순서로 확인해 주세요.
 
-1. [최신 릴리스](https://github.com/JjangguKkilolo/mymelody/releases/latest)의 `Portable.zip`을 폴더 전체로 풀고 `MyMelodyPractice.exe`를 실행합니다. .NET SDK 설치는 필요 없습니다.
+1. [최신 릴리스](https://github.com/JjangguKkilolo/mymelody/releases/latest)의 `MyMelodyPractice-win-Portable.zip`을 폴더 전체로 풀고 **마이멜로디 연습 친구.exe**를 실행합니다. .NET SDK 설치는 필요 없습니다.
 2. **첫 친구 만나기**를 누르고, **설정 → 연습 입력**에서 연결된 건반을 선택합니다.
 3. 1분 정도 연주하며 홈 화면의 오늘 연습 시간이 늘고 캐릭터가 반응하는지 확인합니다.
 4. Cakewalk도 열어 같은 MIDI 건반으로 연주합니다. 소리·입력에 문제가 없는지 확인합니다. 앱을 먼저 실행했을 때와 Cakewalk를 먼저 실행했을 때 각각 확인해 주세요.

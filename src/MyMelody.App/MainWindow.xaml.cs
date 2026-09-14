@@ -16,7 +16,12 @@ public partial class MainWindow : Window
     private bool _loadingSettings;
     private string _page = "Home";
     private DateTime _month = new(DateTime.Today.Year, DateTime.Today.Month, 1);
-    private DateOnly? _selectedDay;
+    private DateOnly _recordStartDate = DateOnly.FromDateTime(DateTime.Today);
+    private DateOnly _recordEndDate = DateOnly.FromDateTime(DateTime.Today);
+    private bool _showingToday = true;
+    private DateTime? _calendarMonth;
+    private bool _refreshingRecords;
+    private IReadOnlyList<PracticeSessionGroup>? _shownSessions;
     private string _collectionSignature = "";
     private readonly Dictionary<string, int> _collectionPreviewStages = new(StringComparer.Ordinal);
     private DateTime _lastRecordsRefresh = DateTime.MinValue;
@@ -54,7 +59,7 @@ public partial class MainWindow : Window
         PageTitle.Text = page switch { "Collection" => "우리의 작은 컬렉션", "Records" => "차곡차곡, 연습의 기록", "Settings" => "나에게 맞는 연습 공간", _ => "오늘도, 조금씩 함께 자라요" };
         PageEyebrow.Text = page switch { "Collection" => "OUR LITTLE STORIES", "Records" => "EVERY LITTLE PRACTICE COUNTS", "Settings" => "MAKE YOURSELF AT HOME", _ => "OUR LITTLE PRACTICE ROOM" };
         if (page == "Collection") RefreshCollection(true);
-        if (page == "Records") RefreshRecords();
+        if (page == "Records") ShowTodayRecords();
     }
     public void Refresh()
     {
@@ -140,40 +145,68 @@ public partial class MainWindow : Window
     }
     private void CollectionSizeChanged(object sender, SizeChangedEventArgs e)
         => CollectionGrid.Columns = Math.Clamp((int)(e.NewSize.Width / 190), 1, 3);
-    private void RefreshRecords()
+    internal void RefreshRecords()
     {
-        _lastRecordsRefresh = DateTime.Now;
-        AllTimeTotal.Text = Duration(Manager.TotalSeconds);
-        MonthTitle.Text = _month.ToString("yyyy년 M월");
-        CalendarGrid.Children.Clear();
-        var daily = Manager.GetDailyStats().ToDictionary(x => x.Date);
-        for (var i = 0; i < (int)_month.DayOfWeek; i++) CalendarGrid.Children.Add(new Border { Height = 58 });
-        for (var day = 1; day <= DateTime.DaysInMonth(_month.Year, _month.Month); day++)
+        if (_refreshingRecords) return;
+        _refreshingRecords = true;
+        try
         {
-            var date = new DateOnly(_month.Year, _month.Month, day);
-            var seconds = daily.TryGetValue(date, out var stat) ? stat.PracticeSeconds : 0;
-            var content = new StackPanel();
-            content.Children.Add(new TextBlock { Text = day.ToString(), HorizontalAlignment = HorizontalAlignment.Center, FontWeight = date == DateOnly.FromDateTime(DateTime.Today) ? FontWeights.Bold : FontWeights.Normal });
-            content.Children.Add(new TextBlock { Text = seconds > 0 ? Duration(seconds) : "·", FontSize = 9, Foreground = Brush("#AC708A"), HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 4, 0, 0) });
-            var button = new Button { Content = content, Height = 58, Margin = new Thickness(2), Padding = new Thickness(2), Background = _selectedDay == date ? Brush("#F6CDDE") : seconds > 0 ? Brush("#FCE9F0") : Brushes.White };
-            button.Click += (_, _) => { _selectedDay = _selectedDay == date ? null : date; RefreshRecords(); };
-            CalendarGrid.Children.Add(button);
+            if (_showingToday && _recordStartDate != DateOnly.FromDateTime(DateTime.Today))
+            {
+                _recordStartDate = _recordEndDate = DateOnly.FromDateTime(DateTime.Today);
+                _month = new DateTime(_recordStartDate.Year, _recordStartDate.Month, 1);
+                SyncRecordRangeInputs();
+            }
+            _lastRecordsRefresh = DateTime.Now;
+            AllTimeTotal.Text = Duration(Manager.TotalSeconds);
+            MonthTitle.Text = _month.ToString("yyyy년 M월");
+            var daily = Manager.GetDailyStats().ToDictionary(x => x.Date);
+            if (_calendarMonth != _month)
+            {
+                CalendarGrid.Children.Clear();
+                for (var i = 0; i < (int)_month.DayOfWeek; i++) CalendarGrid.Children.Add(new Border { Height = 58 });
+                for (var day = 1; day <= DateTime.DaysInMonth(_month.Year, _month.Month); day++)
+                {
+                    var button = new CalendarDayButton(new DateOnly(_month.Year, _month.Month, day));
+                    button.Checked += (_, _) =>
+                    {
+                        if (_refreshingRecords) return;
+                        _showingToday = false;
+                        _recordStartDate = _recordEndDate = button.Date;
+                        SyncRecordRangeInputs();
+                        RefreshRecords();
+                    };
+                    CalendarGrid.Children.Add(button);
+                }
+                _calendarMonth = _month;
+            }
+            foreach (var button in CalendarGrid.Children.OfType<CalendarDayButton>())
+                button.Update(daily.TryGetValue(button.Date, out var stat) ? stat.PracticeSeconds : 0,
+                    _recordStartDate == _recordEndDate && button.Date == _recordStartDate,
+                    button.Date >= _recordStartDate && button.Date <= _recordEndDate);
+            var sessions = Manager.GetPracticeSessions().OrderByDescending(x => x.StartedAt)
+                .Where(x => x.LocalDate >= _recordStartDate && x.LocalDate <= _recordEndDate).ToList();
+            RecordsFilterLabel.Text = (_recordStartDate == _recordEndDate ? _recordStartDate.ToString("yyyy년 M월 d일")
+                : _recordStartDate.ToString("yyyy년 M월 d일") + " – " + _recordEndDate.ToString("yyyy년 M월 d일")) + $" · 세션 {sessions.Count}개";
+            SessionEmpty.Visibility = sessions.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+            SessionEmpty.Text = _recordStartDate == _recordEndDate ? "선택한 날짜에는 연습 기록이 없어요." : "선택한 기간에는 연습 기록이 없어요.";
+            // Keep the existing rows when the five-second refresh has no new practice data.
+            if (_shownSessions != null && _shownSessions.SequenceEqual(sessions)) return;
+            _shownSessions = sessions;
+            SessionsList.Children.Clear();
+            foreach (var session in sessions)
+            {
+                var row = new Grid();
+                row.ColumnDefinitions.Add(new ColumnDefinition()); row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+                var left = new StackPanel();
+                left.Children.Add(new TextBlock { Text = session.StartedAt.LocalDateTime.ToString("M월 d일  HH:mm") + " — " + session.EndedAt.LocalDateTime.ToString("HH:mm"), FontWeight = FontWeights.SemiBold });
+                left.Children.Add(new TextBlock { Text = $"{(session.Mode == PracticeMode.Manual ? "수동 연습" : "MIDI 자동 기록")}  ·  {session.NoteCount:N0}개 음표", FontSize = 11, Foreground = Brush("#947B85"), Margin = new Thickness(0, 5, 0, 0) });
+                row.Children.Add(left);
+                var duration = new TextBlock { Text = Duration(session.PracticeSeconds), FontWeight = FontWeights.Bold, VerticalAlignment = VerticalAlignment.Center }; Grid.SetColumn(duration, 1); row.Children.Add(duration);
+                SessionsList.Children.Add(new Border { Style = (Style)FindResource("Card"), Padding = new Thickness(16), Margin = new Thickness(0, 0, 0, 8), Child = row, Tag = session });
+            }
         }
-        SessionsList.Children.Clear();
-        var sessions = Manager.GetPracticeSessions().OrderByDescending(x => x.StartedAt).Where(x => _selectedDay == null || x.LocalDate == _selectedDay).ToList();
-        SessionEmpty.Visibility = sessions.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
-        SessionEmpty.Text = _selectedDay != null ? "선택한 날짜에는 연습 기록이 없어요. 날짜를 다시 누르면 전체 기록을 볼 수 있어요." : "첫 연습을 시작하면 여기에 기록이 남아요.";
-        foreach (var session in sessions)
-        {
-            var row = new Grid();
-            row.ColumnDefinitions.Add(new ColumnDefinition()); row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            var left = new StackPanel();
-            left.Children.Add(new TextBlock { Text = session.StartedAt.LocalDateTime.ToString("M월 d일  HH:mm") + " — " + session.EndedAt.LocalDateTime.ToString("HH:mm"), FontWeight = FontWeights.SemiBold });
-            left.Children.Add(new TextBlock { Text = $"{(session.Mode == PracticeMode.Manual ? "수동 연습" : "MIDI 자동 기록")}  ·  {session.NoteCount:N0}개 음표", FontSize = 11, Foreground = Brush("#947B85"), Margin = new Thickness(0, 5, 0, 0) });
-            row.Children.Add(left);
-            var duration = new TextBlock { Text = Duration(session.PracticeSeconds), FontWeight = FontWeights.Bold, VerticalAlignment = VerticalAlignment.Center }; Grid.SetColumn(duration, 1); row.Children.Add(duration);
-            SessionsList.Children.Add(new Border { Style = (Style)FindResource("Card"), Padding = new Thickness(16), Margin = new Thickness(0, 0, 0, 8), Child = row });
-        }
+        finally { _refreshingRecords = false; }
     }
     public void RefreshUpdate()
     {
@@ -199,8 +232,33 @@ public partial class MainWindow : Window
     private void DrawClick(object sender, RoutedEventArgs e) => Run(() => { var character = Manager.Draw(); Toast(CharacterCatalog.Get(character.Id).Name + " 마이멜로디를 만났어요 ♡"); Refresh(); Celebrate(); _host.Pet.Refresh(); _host.Pet.Celebrate(); });
     private void PauseClick(object sender, RoutedEventArgs e) => Run(_host.TogglePause);
     private void ManualClick(object sender, RoutedEventArgs e) => Run(() => { if (Manager.IsManual) Manager.StopManual(); else Manager.StartManual(); Refresh(); });
-    private void PreviousMonthClick(object sender, RoutedEventArgs e) { _month = _month.AddMonths(-1); _selectedDay = null; RefreshRecords(); }
-    private void NextMonthClick(object sender, RoutedEventArgs e) { _month = _month.AddMonths(1); _selectedDay = null; RefreshRecords(); }
+    private void PreviousMonthClick(object sender, RoutedEventArgs e) { _month = _month.AddMonths(-1); RefreshRecords(); }
+    private void NextMonthClick(object sender, RoutedEventArgs e) { _month = _month.AddMonths(1); RefreshRecords(); }
+    private void ShowTodayRecords()
+    {
+        _showingToday = true;
+        _recordStartDate = _recordEndDate = DateOnly.FromDateTime(DateTime.Today);
+        _month = new DateTime(_recordStartDate.Year, _recordStartDate.Month, 1);
+        SyncRecordRangeInputs();
+        RefreshRecords();
+    }
+    private void SyncRecordRangeInputs()
+    {
+        StartDatePicker.SelectedDate = _recordStartDate.ToDateTime(TimeOnly.MinValue);
+        EndDatePicker.SelectedDate = _recordEndDate.ToDateTime(TimeOnly.MinValue);
+    }
+    private void ApplyRangeClick(object sender, RoutedEventArgs e)
+    {
+        if (StartDatePicker.SelectedDate is not DateTime start || EndDatePicker.SelectedDate is not DateTime end)
+        { Toast("시작일과 종료일을 모두 선택해 주세요."); return; }
+        if (start.Date > end.Date)
+        { Toast("종료일은 시작일보다 빠를 수 없어요."); return; }
+        _showingToday = false;
+        _recordStartDate = DateOnly.FromDateTime(start);
+        _recordEndDate = DateOnly.FromDateTime(end);
+        _month = new DateTime(start.Year, start.Month, 1);
+        RefreshRecords();
+    }
     private void RefreshMidiClick(object sender, RoutedEventArgs e) => Run(() => { _loadingSettings = true; _host.Midi.RefreshDevices(); LoadMidiDevices(); _loadingSettings = false; });
     private void MidiSelectionChanged(object sender, SelectionChangedEventArgs e)
     {

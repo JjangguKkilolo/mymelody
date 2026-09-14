@@ -13,5 +13,6 @@
     <Compile Include="../../src/MyMelody.App/Services/UpdateService.cs" Link="Services/UpdateService.cs" />
     <Compile Include="../../src/MyMelody.App/Services/VelopackUpdateBackend.cs" Link="Services/VelopackUpdateBackend.cs" />
     <Compile Include="../../src/MyMelody.App/Services/MidiInputService.cs" Link="Services/MidiInputService.cs" />
+    <Compile Include="../../src/MyMelody.App/Services/DesktopPlacement.cs" Link="Services/DesktopPlacement.cs" />
   </ItemGroup>
 </Project>

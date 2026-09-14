@@ -188,6 +188,7 @@ public sealed class AppHost : IDisposable
             try
             {
                 _timer.Stop(); Midi.Dispose(); Manager.Dispose();
+                DisposeTray();
                 Updates.ApplyAndRestart();
             }
             catch (Exception exception)
@@ -235,7 +236,11 @@ public sealed class AppHost : IDisposable
         SystemEvents.PowerModeChanged -= OnPowerModeChanged;
         SystemEvents.DisplaySettingsChanged -= OnDisplaySettingsChanged;
         Midi.Dispose(); Manager.Dispose();
-        if (_tray != null) { _tray.Visible = false; _tray.Dispose(); }
-        _trayIcon?.Dispose();
+        DisposeTray();
+    }
+    private void DisposeTray()
+    {
+        if (_tray != null) { _tray.Visible = false; _tray.Dispose(); _tray = null; }
+        _trayIcon?.Dispose(); _trayIcon = null;
     }
 }

@@ -49,6 +49,7 @@ internal static class UiSmoke
         host.Main.Refresh();
         VerifyCollectionStageSelection(host, clock, output, checks);
         RecordsUiSmoke.Run(host, output, checks);
+        CalendarAppearanceUiSmoke.Run(host, output, checks);
         PetPlacementUiSmoke.Run(host, output, checks);
         foreach (var page in new[] { "Home", "Collection", "Records", "Settings" })
         {

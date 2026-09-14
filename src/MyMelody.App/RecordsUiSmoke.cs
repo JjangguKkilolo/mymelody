@@ -36,6 +36,16 @@ internal static class RecordsUiSmoke
         SelectDate(window, dateA);
         RequireFilter(window, groups, dateA, dateA);
         RequirePickerDates(window, dateA, dateA);
+
+        var monthControls = Element<TextBlock>(window, "MonthTitle").Parent as Panel
+            ?? throw new InvalidDataException("The month navigation controls are missing.");
+        var todayButton = monthControls.Children.OfType<Button>().Single(button => Equals(button.Content, "오늘"));
+        todayButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent, todayButton));
+        window.UpdateLayout();
+        RequireFilter(window, groups, today, today);
+        RequirePickerDates(window, today, today);
+        ShowMonth(window, dateA);
+        SelectDate(window, dateA);
         RepeatSelectedDate(window, groups, dateA);
         SelectDate(window, dateB);
         RequireFilter(window, groups, dateB, dateB);
@@ -121,13 +131,13 @@ internal static class RecordsUiSmoke
             selectedSessionCount = selectedRows.Length, rangeSessionCount = rangeRows.Length,
             todaySessionCount = SessionRows(window).Length, repeatedSelectionStaysChecked = true,
             rangeIncludesBothBoundaries = true, draftDatesSurviveRefresh = true,
-            invalidRangesPreserveAppliedFilter = true, monthNavigationPreservesQuery = true, reentryResetsToToday = true,
+            invalidRangesPreserveAppliedFilter = true, monthNavigationPreservesQuery = true, todayButtonResetsQuery = true, reentryResetsToToday = true,
             rangeOffset, unchangedRefreshPreservesRows = true,
             originalPracticeSeconds = manager.TotalSeconds, originalRawSessionCount = manager.Sessions.Count,
             savedStateAndRawSessionsUnchanged = true
         }, new JsonSerializerOptions { WriteIndented = true }));
         checks.Add("Records opens and reopens on today only; clicking one calendar date replaces the query and repeated clicks keep that single date selected.");
-        checks.Add("Date-range drafts survive refresh without changing the list; applying a range includes both boundary dates, highlights only its dates, and filters every read-only session row correctly.");
+        checks.Add("Date-range drafts survive refresh without changing the list; applying a range includes both boundary dates and filters every read-only session row correctly while daily background color continues to reflect practice duration.");
         checks.Add("Reversed or incomplete ranges report an error and keep the last applied query; unchanged refreshes preserve row instances and scroll position.");
         checks.Add("Calendar and range filtering leave original sessions, growth, settings, and SQLite application JSON unchanged.");
     }
@@ -189,9 +199,11 @@ internal static class RecordsUiSmoke
             Require(button.IsInRange == inRange,
                 "The calendar range highlight is inconsistent with the applied query.");
             Require(marker != null && (marker.Visibility == Visibility.Visible) == selected,
-                "The check marker must identify a single selected date, not multiple days of a range.");
-            Require(chrome?.Background is SolidColorBrush fill && (fill.Color == Colors.White) != (selected || inRange),
-                "Only selected or in-range dates may have a colored calendar background.");
+                "The heart marker must identify a single selected date, not multiple days of a range.");
+            Require(marker!.Text == "♥", "The selected date must use the themed heart marker.");
+            double dailySeconds = groups.Where(session => session.LocalDate == button.Date).Sum(session => session.PracticeSeconds);
+            Require(chrome?.Background is SolidColorBrush fill && fill.Color == CalendarDayButton.ActivityColor(dailySeconds),
+                "A calendar background must reflect its recorded practice duration independently of date selection or query range.");
         }
         var label = Element<TextBlock>(window, "RecordsFilterLabel").Text;
         var expectedDateLabel = single ? start.ToString("yyyy년 M월 d일")

@@ -30,6 +30,14 @@ public partial class MainWindow : Window
     public MainWindow(AppHost host)
     {
         _host = host; InitializeComponent();
+        foreach (double seconds in new[] { 0d, 900, 3600, 7200, 14400 })
+            PracticeColorLegend.Children.Add(new Border
+            {
+                Width = 11, Height = 11, CornerRadius = new CornerRadius(3), Margin = new Thickness(0, 0, 3, 0),
+                Background = new SolidColorBrush(CalendarDayButton.ActivityColor(seconds)),
+                BorderBrush = Brush("#EEDBE3"), BorderThickness = new Thickness(0.5),
+                ToolTip = seconds == 0 ? "연습 기록 없음" : Duration(seconds) + (seconds == 14400 ? " 이상" : "")
+            });
         Icon = AppIcon.LoadWindowIcon();
         var workArea = SystemParameters.WorkArea;
         MinWidth = Math.Min(MinWidth, workArea.Width);
@@ -164,7 +172,7 @@ public partial class MainWindow : Window
             if (_calendarMonth != _month)
             {
                 CalendarGrid.Children.Clear();
-                for (var i = 0; i < (int)_month.DayOfWeek; i++) CalendarGrid.Children.Add(new Border { Height = 58 });
+                for (var i = 0; i < (int)_month.DayOfWeek; i++) CalendarGrid.Children.Add(new Border { Height = 48 });
                 for (var day = 1; day <= DateTime.DaysInMonth(_month.Year, _month.Month); day++)
                 {
                     var button = new CalendarDayButton(new DateOnly(_month.Year, _month.Month, day));
@@ -234,6 +242,7 @@ public partial class MainWindow : Window
     private void ManualClick(object sender, RoutedEventArgs e) => Run(() => { if (Manager.IsManual) Manager.StopManual(); else Manager.StartManual(); Refresh(); });
     private void PreviousMonthClick(object sender, RoutedEventArgs e) { _month = _month.AddMonths(-1); RefreshRecords(); }
     private void NextMonthClick(object sender, RoutedEventArgs e) { _month = _month.AddMonths(1); RefreshRecords(); }
+    private void TodayRecordsClick(object sender, RoutedEventArgs e) => ShowTodayRecords();
     private void ShowTodayRecords()
     {
         _showingToday = true;

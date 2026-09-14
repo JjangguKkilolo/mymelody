@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <StartupObject>MyMelody.App.Program</StartupObject>
+    <AssemblyName>MyMelodyPractice</AssemblyName>
+    <RootNamespace>MyMelody.App</RootNamespace>
+    <Product>마이멜로디 연습 친구</Product>
+    <Description>MIDI practice companion for Windows</Description>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MyMelody.Core\MyMelody.Core.csproj" />
+    <PackageReference Include="Velopack" Version="1.2.0" />
+    <Content Include="Assets\**\*.png" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="Assets\**\*.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

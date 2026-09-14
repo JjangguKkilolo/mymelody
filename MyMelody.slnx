@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MyMelody.App/MyMelody.App.csproj" />
+    <Project Path="src/MyMelody.Core/MyMelody.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MyMelody.Tests/MyMelody.Tests.csproj" />
+    <Project Path="tests/MyMelody.UpdateTests/MyMelody.UpdateTests.csproj" />
+  </Folder>
+</Solution>

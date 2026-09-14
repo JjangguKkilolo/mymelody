@@ -1,0 +1,15 @@
+**/bin/
+**/obj/
+.vs/
+.tooling/
+artifacts/
+tmp/
+*.user
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+.env
+TestResults/

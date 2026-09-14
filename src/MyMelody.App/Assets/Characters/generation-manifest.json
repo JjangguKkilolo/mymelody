@@ -1,0 +1,285 @@
+{
+  "schemaVersion": 1,
+  "generator": "Codex built-in imagegen",
+  "createdDate": "2026-09-14",
+  "referenceUse": "User-provided pastel pixel-art image was used as a visual style reference; final assets are new generated images.",
+  "assetCount": 27,
+  "animationFrameCount": 54,
+  "qa": {
+    "allRgba": true,
+    "allCornersTransparent": true,
+    "allSheetsAspectRatio": "2:1"
+  },
+  "assets": [
+    {
+      "filename": "baking-1.png",
+      "theme": "baking",
+      "stage": 1,
+      "sourceFile": "exec-496dff1a-e8f1-45b8-96a1-d067fc8bebf9.png",
+      "frames": 2,
+      "sha256": "aa0823c4292f559e7eba35a4a9c78f103d9f85627fa87a9003e65be43f197979",
+      "bytes": 666555,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is baking theme, growth stage1 of3. BAKING theme: tiny cupcake-shaped pin on the pink hood.  Beginner appearance: only tiny hood decoration, shy calm tiny neutral mouth, both hands together at chest, no held prop, no neck bow or clothing accessories. Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "baking-2.png",
+      "theme": "baking",
+      "stage": 2,
+      "sourceFile": "exec-fc7a106b-9702-4cc9-80e5-be2e2aa0d107.png",
+      "frames": 2,
+      "sha256": "c7b9f941618f1d324eb9dd80d697f0b69b7b0385631edb57f3bd27387864dc26",
+      "bytes": 724824,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is baking theme, growth stage2 of3. BAKING theme: tiny cupcake-shaped pin on the pink hood.  Friendly appearance: medium tiny rose neck bow added, rosy cheeks and small warm smiling mouth, hands together at chest, no held prop. Keep hood identifying decoration. Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "baking-3.png",
+      "theme": "baking",
+      "stage": 3,
+      "sourceFile": "exec-35c6cdcf-1c69-497d-9fd3-c45ae00786ae.png",
+      "frames": 2,
+      "sha256": "eb67f83933281475b1e9c99477d34f03ff3bb70e511ba9e1673974ce72349f21",
+      "bytes": 799269,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is baking theme, growth stage3 of3. BAKING theme: tiny cupcake-shaped pin on the pink hood. Final accessory: a little cream apron and a pastel pink mixing bowl with spoon held at belly level. Final grown appearance: warm smile and rosy cheeks, wearing the tiny theme accessory and holding the final prop. Head and ears still much larger than the body; prop does not obscure face.  Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "garden-1.png",
+      "theme": "garden",
+      "stage": 1,
+      "sourceFile": "exec-5fcebca9-8cc1-4729-bca8-2d7a49213ce3.png",
+      "frames": 2,
+      "sha256": "92de529b034aa925752612702968a0da7784edbc560d207be64a71ad3594c28e",
+      "bytes": 598655,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is garden theme, growth stage1 of3. GARDEN theme: tiny cream daisy with pale yellow center on the pink hood.  Beginner appearance: only tiny hood decoration, shy calm tiny neutral mouth, both hands together at chest, no held prop, no neck bow or clothing accessories. Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "garden-2.png",
+      "theme": "garden",
+      "stage": 2,
+      "sourceFile": "exec-e3c7b83e-c4b0-4d7d-8fb2-4789eb2d74e2.png",
+      "frames": 2,
+      "sha256": "a6bbf3b4c0afa7dbd7ff5e1d04c8c9b2f92eba2722e64af8e9249129a162e6c6",
+      "bytes": 655911,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is garden theme, growth stage2 of3. GARDEN theme: tiny cream daisy with pale yellow center on the pink hood.  Friendly appearance: medium tiny rose neck bow added, rosy cheeks and small warm smiling mouth, hands together at chest, no held prop. Keep hood identifying decoration. Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "garden-3.png",
+      "theme": "garden",
+      "stage": 3,
+      "sourceFile": "exec-4a701cad-8a83-4e0a-b34d-d8f176abae74.png",
+      "frames": 2,
+      "sha256": "b816ea759511db3d8bf513a8e15d5b06d19c4405bef3cc0f8a74bdf3827d86bb",
+      "bytes": 689590,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is garden theme, growth stage3 of3. GARDEN theme: tiny cream daisy with pale yellow center on the pink hood. Final accessory: a tiny mint-green watering can held at belly level. Final grown appearance: warm smile and rosy cheeks, wearing the tiny theme accessory and holding the final prop. Head and ears still much larger than the body; prop does not obscure face.  Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "pajamas-1.png",
+      "theme": "pajamas",
+      "stage": 1,
+      "sourceFile": "exec-cafb9d58-c4fd-4048-9e86-69f21d841d49.png",
+      "frames": 2,
+      "sha256": "a905d35e5f0c75cb95cf2befb2abd219f198be12a981123f224fa11eb126af3e",
+      "bytes": 753272,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is pajamas theme, growth stage1 of3. PAJAMAS theme: pink nightcap-like hood with a tiny pale-yellow moon pin.  Beginner appearance: only tiny hood decoration, shy calm tiny neutral mouth, both hands together at chest, no held prop, no neck bow or clothing accessories. Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "pajamas-2.png",
+      "theme": "pajamas",
+      "stage": 2,
+      "sourceFile": "exec-a521340a-0140-45b1-ab89-d7472f48e525.png",
+      "frames": 2,
+      "sha256": "9200cacfa74d6927a7bd900587eb961f741a8059ec35419ff296da22a8729b5f",
+      "bytes": 829391,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is pajamas theme, growth stage2 of3. PAJAMAS theme: pink nightcap-like hood with a tiny pale-yellow moon pin.  Friendly appearance: medium tiny rose neck bow added, rosy cheeks and small warm smiling mouth, hands together at chest, no held prop. Keep hood identifying decoration. Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "pajamas-3.png",
+      "theme": "pajamas",
+      "stage": 3,
+      "sourceFile": "exec-809ffca0-107b-4ea2-b71e-c3875be4fe34.png",
+      "frames": 2,
+      "sha256": "743034fd42d89bcfb8389aa93da18d848568ac6ac9635a05d0311e64f6500ae5",
+      "bytes": 764295,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is pajamas theme, growth stage3 of3. PAJAMAS theme: pink nightcap-like hood with a tiny pale-yellow moon pin. Final accessory: pale pink pajama collar and a small heart-shaped pillow hugged to the belly. Final grown appearance: warm smile and rosy cheeks, wearing the tiny theme accessory and holding the final prop. Head and ears still much larger than the body; prop does not obscure face.  Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "piano-1.png",
+      "theme": "piano",
+      "stage": 1,
+      "sourceFile": "exec-d0ceaddf-ccbc-42d3-a085-c8b11685fa36.png",
+      "frames": 2,
+      "sha256": "8f8fbc1c32b07c6bd8c4359b4be94dcecfd6a955cbeb50f6d7a5b9c4ede96a22",
+      "bytes": 656359,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is piano theme, growth stage1 of3. PIANO theme: tiny cream music-note pin on the pink hood.  Beginner appearance: only tiny hood decoration, shy calm tiny neutral mouth, both hands together at chest, no held prop, no neck bow or clothing accessories. Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "piano-2.png",
+      "theme": "piano",
+      "stage": 2,
+      "sourceFile": "exec-bd0070e0-e012-41f9-8d4e-38a13375d93f.png",
+      "frames": 2,
+      "sha256": "4f5b89e8b02ea417f606915c18cdb49af598251407b295c4420b9b952ea8c1e2",
+      "bytes": 697999,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is piano theme, growth stage2 of3. PIANO theme: tiny cream music-note pin on the pink hood.  Friendly appearance: medium tiny rose neck bow added, rosy cheeks and small warm smiling mouth, hands together at chest, no held prop. Keep hood identifying decoration. Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "piano-3.png",
+      "theme": "piano",
+      "stage": 3,
+      "sourceFile": "exec-1e55f42e-32a7-4155-982a-ab4c411a3247.png",
+      "frames": 2,
+      "sha256": "2807f777afd64cda9401d8d9a2af5524a3f094003957eebc49162316c38f6840",
+      "bytes": 733723,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is piano theme, growth stage3 of3. PIANO theme: tiny cream music-note pin on the pink hood. Final accessory: a miniature rose-colored toy piano keyboard held in front of the belly. Final grown appearance: warm smile and rosy cheeks, wearing the tiny theme accessory and holding the final prop. Head and ears still much larger than the body; prop does not obscure face.  Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "rain-1.png",
+      "theme": "rain",
+      "stage": 1,
+      "sourceFile": "exec-cc701d4b-cf88-4190-b43c-23857642504a.png",
+      "frames": 2,
+      "sha256": "4d54d77e9741caeb2739594d06bc57b4c6b037a5d50d9014bf480ee7564b010d",
+      "bytes": 694993,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is rain theme, growth stage1 of3. RAINY DAY theme: tiny pale-blue raindrop pin on the pink hood.  Beginner appearance: only tiny hood decoration, shy calm tiny neutral mouth, both hands together at chest, no held prop, no neck bow or clothing accessories. Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "rain-2.png",
+      "theme": "rain",
+      "stage": 2,
+      "sourceFile": "exec-12220ce1-e594-43a1-8be0-5c60c3013443.png",
+      "frames": 2,
+      "sha256": "653b7cced8391675a33a52d970cb4b6d4ef94455e65a8357d041a74df3dd8606",
+      "bytes": 681561,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is rain theme, growth stage2 of3. RAINY DAY theme: tiny pale-blue raindrop pin on the pink hood.  Friendly appearance: medium tiny rose neck bow added, rosy cheeks and small warm smiling mouth, hands together at chest, no held prop. Keep hood identifying decoration. Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "rain-3.png",
+      "theme": "rain",
+      "stage": 3,
+      "sourceFile": "exec-88f0cb96-c83e-4ab8-ab87-f49a63f31dda.png",
+      "frames": 2,
+      "sha256": "2407757e8d5dc6aded5232eca66d3e868379e69c58ac2490f3251a3859baf487",
+      "bytes": 783836,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is rain theme, growth stage3 of3. RAINY DAY theme: tiny pale-blue raindrop pin on the pink hood. Final accessory: a short pastel pink rain cape, cream rain boots and tiny closed umbrella held down beside body. Final grown appearance: warm smile and rosy cheeks, wearing the tiny theme accessory and holding the final prop. Head and ears still much larger than the body; prop does not obscure face.  Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "reading-1.png",
+      "theme": "reading",
+      "stage": 1,
+      "sourceFile": "exec-a437b200-6b2c-4300-bce0-c7eb785210f3.png",
+      "frames": 2,
+      "sha256": "2de3407d48d3ed668a8ab78a33d03d7fc96a52dec9b63a18c22e6ded8c34e022",
+      "bytes": 615722,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is reading theme, growth stage1 of3. READING theme: small rose bookmark-shaped pin on the pink hood.  Beginner appearance: only tiny hood decoration, shy calm tiny neutral mouth, both hands together at chest, no held prop, no neck bow or clothing accessories. Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "reading-2.png",
+      "theme": "reading",
+      "stage": 2,
+      "sourceFile": "exec-0190bcfd-eeba-44e2-8b41-a20c4c6f029b.png",
+      "frames": 2,
+      "sha256": "bc7cad60029772423d80d1d77044a8184206d3eeba6cb93702243334c4e9077a",
+      "bytes": 657949,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is reading theme, growth stage2 of3. READING theme: small rose bookmark-shaped pin on the pink hood.  Friendly appearance: medium tiny rose neck bow added, rosy cheeks and small warm smiling mouth, hands together at chest, no held prop. Keep hood identifying decoration. Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "reading-3.png",
+      "theme": "reading",
+      "stage": 3,
+      "sourceFile": "exec-cab5cbd8-5cb9-4394-8403-6d4110e6c4a5.png",
+      "frames": 2,
+      "sha256": "3a4485c1f4c631586252e49dd88bf9dcf02fd7bcb4f62a0d269d24179d7d1380",
+      "bytes": 739936,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is reading theme, growth stage3 of3. READING theme: small rose bookmark-shaped pin on the pink hood. Final accessory: a small open dusty-pink storybook held at belly level. Final grown appearance: warm smile and rosy cheeks, wearing the tiny theme accessory and holding the final prop. Head and ears still much larger than the body; prop does not obscure face.  Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "ribbon-1.png",
+      "theme": "ribbon",
+      "stage": 1,
+      "sourceFile": "exec-b61275a3-3111-4986-94b8-24920f8c1a9a.png",
+      "frames": 2,
+      "sha256": "fcabd7cd2d6144df633b52524106277abe6f6c411c5889056f2ca88248c14570",
+      "bytes": 651455,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is ribbon theme, growth stage1 of3. RIBBON theme: small rose ribbon pinned at one ear.  Beginner appearance: only tiny hood decoration, shy calm tiny neutral mouth, both hands together at chest, no held prop, no neck bow or clothing accessories. Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "ribbon-2.png",
+      "theme": "ribbon",
+      "stage": 2,
+      "sourceFile": "exec-a4e0d808-af7a-4231-bafb-f1ae90ddfa84.png",
+      "frames": 2,
+      "sha256": "6d9ef91dee12d6bd7d6f71853bc3fea32cedf204a0af37b685aba5117a258c31",
+      "bytes": 716409,
+      "prompt": "Use case: stylized-concept. Asset type: a single square transparent PNG sprite for a personal Windows desktop pet displayed at 96x96 DIP. Primary request: draw an original new full-body My Melody character, using the user's reference only for pastel pixel-art style. Subject: Sanrio My Melody, tiny white rabbit wearing pale blush pink hood with two very long rabbit ears, one gently bent, huge round head and tiny body, small yellow oval nose and tiny dot eyes. Style: genuine chunky crisp square pixel art, dusty rose pixel outlines, pale pink and cream-white palette, cute calm cozy expression, simple silhouette readable at tiny size. Composition: full body FRONT VIEW centered with both ears entirely visible, feet at 88% canvas height, ears at 9%, character occupies about 70% width; consistent proportions with all collection sprites. Background MUST be true transparent alpha, no opaque background, no scene, no fake checkerboard. Use hard square pixel edges without soft brush strokes or antialiasing; very limited colors. No text, watermark, signature, labels, frame, border or extra characters. IMPORTANT: output is a WIDE HORIZONTAL TWO-FRAME SPRITE SHEET for ONE character, with exactly two equal square cells side by side. Total image aspect ratio 2:1. Both cells show identical centered My Melody, same exact pixel placement, same front-facing full-body silhouette and accessories; first cell is eyes-open, second is identical pose with only eyes closed for blink. Plain TRUE TRANSPARENT ALPHA background in both cells. NO checkerboard gray pattern! Theme: RIBBON, growth stage2: rose ribbon pinned at left ear, tiny pale pink bow at neck, richer blush cheeks and small warm smiling mouth. Both hands held together shyly, no held objects. Cozy cute chunky pixel art. No divider or labels."
+    },
+    {
+      "filename": "ribbon-3.png",
+      "theme": "ribbon",
+      "stage": 3,
+      "sourceFile": "exec-875ecc50-b012-437e-bd33-dd8e6c97b097.png",
+      "frames": 2,
+      "sha256": "1e35bbeae86df103dd393ed7d99ba56374d5ac8bcb904479ddf16298c159ce5e",
+      "bytes": 827612,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is ribbon theme, growth stage3 of3. RIBBON theme: small rose ribbon pinned at one ear. Final accessory: larger satin pink bow at neck and a tiny heart held with both hands. Final grown appearance: warm smile and rosy cheeks, wearing the tiny theme accessory and holding the final prop. Head and ears still much larger than the body; prop does not obscure face.  Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "starry-1.png",
+      "theme": "starry",
+      "stage": 1,
+      "sourceFile": "exec-0894944b-686e-4dc5-8cbb-b7943f8bacfe.png",
+      "frames": 2,
+      "sha256": "6e8dfcb76958351907646ecd156291b8bae0033ff1ae12a05fd9b94bc380fd4b",
+      "bytes": 703090,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is starry theme, growth stage1 of3. STARRY NIGHT theme: tiny pale-yellow star pin on the pink hood.  Beginner appearance: only tiny hood decoration, shy calm tiny neutral mouth, both hands together at chest, no held prop, no neck bow or clothing accessories. Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "starry-2.png",
+      "theme": "starry",
+      "stage": 2,
+      "sourceFile": "exec-e79521c5-aa21-4573-9fe4-6685fd816eec.png",
+      "frames": 2,
+      "sha256": "684aa29dfb1bb8c6ee2126434573916a3e6a39b16664bb8dcff38ce9b2cc052c",
+      "bytes": 626678,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is starry theme, growth stage2 of3. STARRY NIGHT theme: tiny pale-yellow star pin on the pink hood.  Friendly appearance: medium tiny rose neck bow added, rosy cheeks and small warm smiling mouth, hands together at chest, no held prop. Keep hood identifying decoration. Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "starry-3.png",
+      "theme": "starry",
+      "stage": 3,
+      "sourceFile": "exec-b783b737-7ed0-4b41-bbe4-c97713c05405.png",
+      "frames": 2,
+      "sha256": "86b8ef7345c9640293528d470f5cebd56392abc40cdb8f94089063c0cf1be08f",
+      "bytes": 804920,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is starry theme, growth stage3 of3. STARRY NIGHT theme: tiny pale-yellow star pin on the pink hood. Final accessory: a small lavender collar, tiny crescent moon charm, and pastel-yellow star wand held beside the belly. Final grown appearance: warm smile and rosy cheeks, wearing the tiny theme accessory and holding the final prop. Head and ears still much larger than the body; prop does not obscure face.  Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "strawberry-1.png",
+      "theme": "strawberry",
+      "stage": 1,
+      "sourceFile": "exec-fb2eecad-49c1-4d4b-83af-1af6d115634b.png",
+      "frames": 2,
+      "sha256": "e88f2668e32b36d73a6df692a3864abb153e3d5d0a36c593dde6466edadfe328",
+      "bytes": 673958,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is strawberry theme, growth stage1 of3. STRAWBERRY theme: small pastel-red strawberry pin with muted mint leaf on the pink hood.  Beginner appearance: only tiny hood decoration, shy calm tiny neutral mouth, both hands together at chest, no held prop, no neck bow or clothing accessories. Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "strawberry-2.png",
+      "theme": "strawberry",
+      "stage": 2,
+      "sourceFile": "exec-d40109b1-0832-43c4-9739-7ef49de3d774.png",
+      "frames": 2,
+      "sha256": "d8ab406f0b495e4d212222b46d6f695ec312c890e755ac131049b3711d693c2f",
+      "bytes": 716038,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is strawberry theme, growth stage2 of3. STRAWBERRY theme: small pastel-red strawberry pin with muted mint leaf on the pink hood.  Friendly appearance: medium tiny rose neck bow added, rosy cheeks and small warm smiling mouth, hands together at chest, no held prop. Keep hood identifying decoration. Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    },
+    {
+      "filename": "strawberry-3.png",
+      "theme": "strawberry",
+      "stage": 3,
+      "sourceFile": "exec-f96d0179-97b5-476f-a2e4-0d1c9cac8f37.png",
+      "frames": 2,
+      "sha256": "9c571524e57c9a8755a2969c0828893ebe694e0790069ff051c317ba3da64a50",
+      "bytes": 766415,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent horizontal 2-frame PNG sprite sheet for a personal Windows desktop pet displayed at96x96DIP. Output exactly TWO equal square cells side by side, 2:1 overall aspect ratio. Draw My Melody, the cute Sanrio white rabbit with blush-pink hood and two very long ears, left upright, right gently bent, oversized round head and tiny chubby body, cream-white face/fur, tiny yellow oval nose. Front-facing FULL BODY centered in each cell, identical exact size/position/silhouette/proportions/pose/accessories in both cells, with generous transparent safety margin around ears and feet. LEFT CELL: both eyes open tiny dark dots. RIGHT CELL: same pose and mouth, only eyes gently CLOSED as two tiny dark curves for blinking. Pink/dusty-rose chunky hard square pixel-art outlines, cream-white and blush-pink flat colors, small kawaii proportions, very soft pastel cute appearance, pixel edges, limited palette, no blur. Background MUST be true transparent ALPHA, not gray, not white, not black, not a checkerboard illustration! Do not paint any surrounding background at all. No divider, no text, labels, signature, watermark, frame, shadow, glow, or other characters. This asset is strawberry theme, growth stage3 of3. STRAWBERRY theme: small pastel-red strawberry pin with muted mint leaf on the pink hood. Final accessory: tiny strawberry basket held in front of the belly. Final grown appearance: warm smile and rosy cheeks, wearing the tiny theme accessory and holding the final prop. Head and ears still much larger than the body; prop does not obscure face.  Remember BOTH CELLS identical except open eyes in left and blink eyes in right. Output genuine transparent alpha PNG."
+    }
+  ]
+}

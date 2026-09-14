@@ -1,0 +1,36 @@
+name: Build and test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
+        with:
+          global-json-file: global.json
+      - name: Build application
+        shell: pwsh
+        run: dotnet build src/MyMelody.App/MyMelody.App.csproj -c Release --nologo
+      - name: Render all views and validate 27 animated character sheets
+        shell: pwsh
+        run: ./scripts/verify-ui.ps1 -Exe src/MyMelody.App/bin/Release/net10.0-windows/MyMelodyPractice.exe -OutputDirectory artifacts/ci-ui
+      - name: Run all test projects
+        shell: pwsh
+        run: |
+          Get-ChildItem tests -Recurse -Filter '*.csproj' |
+          Where-Object { (Get-Content -LiteralPath $_.FullName -Raw) -match '<IsTestProject>true</IsTestProject>' } |
+          ForEach-Object {
+            dotnet test $_.FullName -c Release --nologo
+            if ($LASTEXITCODE -ne 0) { throw "Tests failed: $($_.Name)" }
+          }

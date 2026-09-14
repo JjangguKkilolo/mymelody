@@ -1,0 +1,26 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <SolidColorBrush x:Key="Ink" Color="#503B45"/>
+  <SolidColorBrush x:Key="Muted" Color="#947B85"/>
+  <SolidColorBrush x:Key="Rose" Color="#CC6C8D"/>
+  <SolidColorBrush x:Key="Pale" Color="#FCEBF0"/>
+  <SolidColorBrush x:Key="Line" Color="#EFDFE5"/>
+  <Style TargetType="Window"><Setter Property="FontFamily" Value="맑은 고딕"/><Setter Property="FontSize" Value="13"/><Setter Property="Foreground" Value="{StaticResource Ink}"/><Setter Property="Background" Value="#FFFBFC"/></Style>
+  <Style TargetType="TextBlock"><Setter Property="TextWrapping" Value="Wrap"/></Style>
+  <Style TargetType="Button">
+    <Setter Property="Background" Value="White"/><Setter Property="Foreground" Value="{StaticResource Ink}"/><Setter Property="BorderBrush" Value="{StaticResource Line}"/><Setter Property="BorderThickness" Value="1"/><Setter Property="Padding" Value="16,10"/><Setter Property="Cursor" Value="Hand"/><Setter Property="FontSize" Value="13"/>
+    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button">
+      <Border x:Name="Chrome" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="12" Padding="{TemplateBinding Padding}">
+        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+      </Border>
+      <ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Chrome" Property="Opacity" Value="0.8"/></Trigger><Trigger Property="IsPressed" Value="True"><Setter TargetName="Chrome" Property="Opacity" Value="0.65"/></Trigger><Trigger Property="IsEnabled" Value="False"><Setter TargetName="Chrome" Property="Opacity" Value="0.42"/></Trigger></ControlTemplate.Triggers>
+    </ControlTemplate></Setter.Value></Setter>
+  </Style>
+  <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}"><Setter Property="Background" Value="{StaticResource Rose}"/><Setter Property="Foreground" Value="White"/><Setter Property="BorderThickness" Value="0"/><Setter Property="FontWeight" Value="SemiBold"/></Style>
+  <Style x:Key="NavButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}"><Setter Property="HorizontalContentAlignment" Value="Left"/><Setter Property="Margin" Value="0,4"/><Setter Property="Padding" Value="12,13"/><Setter Property="Background" Value="Transparent"/><Setter Property="BorderThickness" Value="0"/></Style>
+  <Style x:Key="Card" TargetType="Border"><Setter Property="Background" Value="White"/><Setter Property="BorderBrush" Value="{StaticResource Line}"/><Setter Property="BorderThickness" Value="1"/><Setter Property="CornerRadius" Value="20"/><Setter Property="Padding" Value="22"/></Style>
+  <Style x:Key="Caption" TargetType="TextBlock"><Setter Property="Foreground" Value="{StaticResource Muted}"/><Setter Property="FontSize" Value="12"/></Style>
+  <Style x:Key="SectionTitle" TargetType="TextBlock"><Setter Property="FontSize" Value="17"/><Setter Property="FontWeight" Value="SemiBold"/><Setter Property="Margin" Value="0,0,0,12"/></Style>
+  <Style TargetType="CheckBox"><Setter Property="Margin" Value="0,9"/><Setter Property="VerticalContentAlignment" Value="Center"/><Setter Property="Foreground" Value="{StaticResource Ink}"/></Style>
+  <Style TargetType="ComboBox"><Setter Property="Padding" Value="10,7"/><Setter Property="FontSize" Value="13"/><Setter Property="MinHeight" Value="36"/></Style>
+  <Style TargetType="ProgressBar"><Setter Property="Height" Value="10"/><Setter Property="Foreground" Value="{StaticResource Rose}"/><Setter Property="Background" Value="{StaticResource Pale}"/><Setter Property="BorderThickness" Value="0"/></Style>
+</ResourceDictionary>

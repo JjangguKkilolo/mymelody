@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 1,
+  "assets": [
+    {
+      "filename": "baking-1.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "baking-2.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "baking-3.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "garden-1.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "garden-2.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "garden-3.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "pajamas-1.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "pajamas-2.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "pajamas-3.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "piano-1.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "piano-2.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "piano-3.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "rain-1.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "rain-2.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "rain-3.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "reading-1.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "reading-2.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "reading-3.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "ribbon-1.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "ribbon-2.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "ribbon-3.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "starry-1.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "starry-2.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "starry-3.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "strawberry-1.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "strawberry-2.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    },
+    {
+      "filename": "strawberry-3.png",
+      "frames": 2,
+      "layout": "horizontal",
+      "width": 1774,
+      "height": 887,
+      "frameWidth": 887,
+      "frameHeight": 887
+    }
+  ]
+}

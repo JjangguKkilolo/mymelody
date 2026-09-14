@@ -11,10 +11,13 @@
     <Product>마이멜로디 연습 친구</Product>
     <Description>MIDI practice companion for Windows</Description>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\Brand\app.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyMelody.Core\MyMelody.Core.csproj" />
     <PackageReference Include="Velopack" Version="1.2.0" />
+    <None Remove="Assets\Brand\app.ico" />
+    <Resource Include="Assets\Brand\app.ico" />
     <Content Include="Assets\**\*.png" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <Content Include="Assets\**\*.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>

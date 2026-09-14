@@ -17,6 +17,7 @@ public sealed class AppHost : IDisposable
     private readonly EventWaitHandle _showSignal;
     private readonly DispatcherTimer _timer = new() { Interval = TimeSpan.FromMilliseconds(500) };
     private Forms.NotifyIcon? _tray;
+    private System.Drawing.Icon? _trayIcon;
     private string? _growthSignature;
     private string? _growthCharacterId;
     private DateTimeOffset _nextUpdateCheck = DateTimeOffset.MinValue;
@@ -91,7 +92,8 @@ public sealed class AppHost : IDisposable
         menu.Items.Add("연습 일시정지 / 재개", null, (_, _) => Dispatch(TogglePause));
         menu.Items.Add(new Forms.ToolStripSeparator());
         menu.Items.Add("종료", null, (_, _) => Dispatch(Exit));
-        _tray = new Forms.NotifyIcon { Text = "마이멜로디 연습 친구", Icon = System.Drawing.SystemIcons.Information, Visible = true, ContextMenuStrip = menu };
+        _trayIcon = AppIcon.CreateTrayIcon();
+        _tray = new Forms.NotifyIcon { Text = "마이멜로디 연습 친구", Icon = _trayIcon, Visible = true, ContextMenuStrip = menu };
         _tray.DoubleClick += (_, _) => Dispatch(() => ShowMain());
         SystemEvents.SessionSwitch += OnSessionSwitch;
         SystemEvents.PowerModeChanged += OnPowerModeChanged;
@@ -234,5 +236,6 @@ public sealed class AppHost : IDisposable
         SystemEvents.DisplaySettingsChanged -= OnDisplaySettingsChanged;
         Midi.Dispose(); Manager.Dispose();
         if (_tray != null) { _tray.Visible = false; _tray.Dispose(); }
+        _trayIcon?.Dispose();
     }
 }

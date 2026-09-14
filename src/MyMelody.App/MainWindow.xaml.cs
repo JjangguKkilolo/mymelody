@@ -24,6 +24,7 @@ public partial class MainWindow : Window
     public MainWindow(AppHost host)
     {
         _host = host; InitializeComponent();
+        Icon = AppIcon.LoadWindowIcon();
         var workArea = SystemParameters.WorkArea;
         MinWidth = Math.Min(MinWidth, workArea.Width);
         MinHeight = Math.Min(500, workArea.Height);

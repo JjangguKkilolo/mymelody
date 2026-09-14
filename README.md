@@ -67,4 +67,6 @@ dotnet run --project src/MyMelody.App
 
 검증 범위와 재현 방법은 [검증 문서](docs/verification.md), [친구에게 전달할 테스트 안내](docs/friend-testing.md), 그림 생성 프롬프트는 [아트 문서](docs/art-prompts.md)를 참고하세요.
 
+앱 아이콘 원본과 생성 프롬프트·Windows ICO 재생성 방법은 [아이콘 제작 기록](docs/icon-art.md)에 있습니다.
+
 개인용 비공식 팬 프로젝트입니다. My Melody 캐릭터는 Sanrio의 캐릭터이며 이 앱은 Sanrio의 공식 제품이 아닙니다.

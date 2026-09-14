@@ -25,6 +25,7 @@ internal static class UiSmoke
         output = Path.GetFullPath(output); Directory.CreateDirectory(output);
         var manager = host.Manager;
         var checks = new List<string>();
+        VerifyIcon(host.Main, checks, output);
         host.Main.Refresh(); Render(host.Main, output, "welcome", 1);
         checks.Add("Welcome window renders before first draw.");
         for (int i = 0; i < 6; i++)
@@ -90,6 +91,58 @@ internal static class UiSmoke
         checks.Add("UI backing state persists and roundtrips backup after7 unique draws.");
         File.WriteAllText(Path.Combine(output, "result.json"), JsonSerializer.Serialize(new { success = true, checks, manager.DataDirectory, totalSeconds = manager.TotalSeconds }, new JsonSerializerOptions { WriteIndented = true }));
     }
+    private static void VerifyIcon(MainWindow window, List<string> checks, string output)
+    {
+        var decoder = BitmapDecoder.Create(AppIcon.ResourceUri, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
+        int[] expectedSizes = [16, 20, 24, 32, 40, 48, 64, 128, 256];
+        if (!decoder.Frames.Select(frame => frame.PixelWidth).Order().SequenceEqual(expectedSizes) ||
+            decoder.Frames.Any(frame => frame.PixelWidth != frame.PixelHeight))
+            throw new InvalidDataException("The bundled icon must contain all nine square Windows icon sizes.");
+        if (window.Icon == null) throw new InvalidDataException("The management window icon was not assigned.");
+        using var trayIcon = AppIcon.CreateTrayIcon();
+        if (trayIcon.Width != trayIcon.Height || !expectedSizes.Contains(trayIcon.Width))
+            throw new InvalidDataException("The tray icon could not select a bundled Windows icon size.");
+        if (string.Equals(Path.GetFileName(Environment.ProcessPath), "MyMelodyPractice.exe", StringComparison.OrdinalIgnoreCase))
+        {
+            if (GetIconCount(Environment.ProcessPath!, -1, IntPtr.Zero, IntPtr.Zero, 0) is 0 or uint.MaxValue)
+                throw new InvalidDataException("The application executable has no embedded icon.");
+        }
+        var preview = new StackPanel { Width = 940, Background = Brushes.White };
+        foreach (var dark in new[] { false, true })
+        {
+            var section = new StackPanel { Margin = new Thickness(20, 14, 20, 14) };
+            section.Children.Add(new TextBlock
+            {
+                Text = dark ? "Windows icon sizes · dark background" : "Windows icon sizes · light background",
+                FontFamily = new FontFamily("Segoe UI"), FontSize = 16,
+                Foreground = dark ? Brushes.White : Brushes.Black, Margin = new Thickness(0, 0, 0, 10)
+            });
+            var row = new StackPanel { Orientation = Orientation.Horizontal };
+            foreach (var frame in decoder.Frames.OrderBy(frame => frame.PixelWidth))
+            {
+                int size = frame.PixelWidth;
+                var cell = new StackPanel { Width = Math.Max(48, size) + 12 };
+                var imageArea = new Grid { Height = 256 };
+                imageArea.Children.Add(new Image { Source = frame, Width = size, Height = size, Stretch = Stretch.None });
+                cell.Children.Add(imageArea);
+                cell.Children.Add(new TextBlock
+                {
+                    Text = $"{size} px", FontFamily = new FontFamily("Segoe UI"), FontSize = 12,
+                    HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 8, 0, 0),
+                    Foreground = dark ? Brushes.White : Brushes.Black
+                });
+                row.Children.Add(cell);
+            }
+            section.Children.Add(row);
+            preview.Children.Add(new Border { Background = dark ? new SolidColorBrush(Color.FromRgb(32, 33, 37)) : Brushes.White, Child = section });
+        }
+        preview.Measure(new Size(940, double.PositiveInfinity));
+        preview.Arrange(new Rect(new Point(), preview.DesiredSize)); preview.UpdateLayout();
+        SaveVisual(preview, preview.ActualWidth, preview.ActualHeight, 1, Path.Combine(output, "icons-preview.png"));
+        checks.Add("All nine bundled ICO sizes decode; the window and tray load the custom icon, and the published executable embeds an icon.");
+    }
+    [System.Runtime.InteropServices.DllImport("shell32.dll", EntryPoint = "ExtractIconExW", CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
+    private static extern uint GetIconCount(string path, int index, IntPtr largeIcons, IntPtr smallIcons, uint count);
     private static void Render(MainWindow window, string directory, string name, double scale)
     {
         window.UpdateLayout();

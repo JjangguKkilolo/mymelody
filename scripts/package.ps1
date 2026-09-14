@@ -16,6 +16,8 @@ $publishPath = Join-Path $workspaceRoot ("artifacts/publish/$Version-" + [guid]:
 $localDotnet = Join-Path $workspaceRoot '.tooling/dotnet/dotnet.exe'
 $dotnetExe = if (Test-Path -LiteralPath $localDotnet) { $localDotnet } else { 'dotnet' }
 $notesPath = [IO.Path]::GetFullPath($(if ([IO.Path]::IsPathRooted($ReleaseNotes)) { $ReleaseNotes } else { Join-Path $workspaceRoot $ReleaseNotes }))
+$iconPath = Join-Path $workspaceRoot 'src/MyMelody.App/Assets/Brand/app.ico'
+if (!(Test-Path -LiteralPath $iconPath)) { throw 'The application icon is missing.' }
 
 Push-Location -LiteralPath $workspaceRoot
 try {
@@ -61,7 +63,7 @@ try {
         "# 마이멜로디 연습 친구 $Version`n`nMIDI 연습 기록, 캐릭터 성장과 컬렉션, 백업 및 GitHub 업데이트를 제공합니다." | Set-Content -LiteralPath $notesPath -Encoding utf8
     }
     New-Item -ItemType Directory -Force -Path $outputPath | Out-Null
-    & $dotnetExe tool run vpk -- pack --packId MyMelodyPractice --packVersion $Version --packDir $publishPath --mainExe MyMelodyPractice.exe --packTitle '마이멜로디 연습 친구' --packAuthors 'JjangguKkilolo' --channel win --runtime win-x64 --outputDir $outputPath --releaseNotes $notesPath --delta None
+    & $dotnetExe tool run vpk -- pack --packId MyMelodyPractice --packVersion $Version --packDir $publishPath --mainExe MyMelodyPractice.exe --packTitle '마이멜로디 연습 친구' --packAuthors 'JjangguKkilolo' --channel win --runtime win-x64 --outputDir $outputPath --releaseNotes $notesPath --icon $iconPath --delta None
     if ($LASTEXITCODE -ne 0) { throw 'Velopack packaging failed.' }
 
     # The package CLI uses channel-qualified file names for its Windows artifacts.

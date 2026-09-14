@@ -234,15 +234,28 @@ internal static class UiSmoke
         double maximumDipHeight = dpiMeasurements.Max(item => item.VisibleHeight / item.Scale);
         if (maximumDipHeight - minimumDipHeight > heightTolerance)
             failures.Add($"DPI changed the logical visible height: {minimumDipHeight:0.00}–{maximumDipHeight:0.00} DIP.");
+
+        // A comparison within the current catalog cannot catch every character shrinking
+        // together after a wide costume is added. Keep the released v1.1.1 pixel baseline.
+        var defaultMeasurements = measurements.Where(item => item.DipSize == 96 && item.Scale == 1).ToList();
+        int expectedExpressions = CharacterCatalog.All.Count * SpriteSheet.Stages * SpriteSheet.Columns;
+        if (defaultMeasurements.Count != expectedExpressions)
+            failures.Add($"The released size baseline is missing expressions: expected {expectedExpressions}, found {defaultMeasurements.Count}.");
+        foreach (var item in defaultMeasurements)
+            if (item.VisibleHeight != 69 || item.Bottom != 84)
+                failures.Add($"Character differs from the released size: {item.Id} stage {item.Stage}, blink={item.Blink}, expected 69 px height / y84 baseline but rendered {item.VisibleHeight} px / y{item.Bottom}.");
+
         File.WriteAllText(Path.Combine(output, "size-checks.json"), JsonSerializer.Serialize(new
         {
             success = failures.Count == 0, alphaThreshold = 16,
             tolerancesInPhysicalPixels = new { height = heightTolerance, baseline = baselineTolerance, blinkCenter = centerTolerance },
+            releasedSizeBaseline = new { referenceVersion = "1.1.1", dipSize = 96, scale = 1, visibleHeight = 69, bottom = 84, expectedExpressions, measuredExpressions = defaultMeasurements.Count },
             configurations = summaries, minimumDipHeight, maximumDipHeight, measurements, failures
         }, new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
         if (failures.Count != 0)
             throw new InvalidDataException("Character size regression; see size-checks.json. " + string.Join(" ", failures.Take(5)));
         checks.Add($"All {CharacterCatalog.All.Count * SpriteSheet.Stages * SpriteSheet.Columns} actual sprite expressions retain uniform visible height, a common baseline, and stable blink alignment at 96 DIP with 100/150/200% DPI and at 48/384 DIP; geometry differs by at most 2 physical pixels for height and 1 for baseline or blink center.");
+        checks.Add($"All {expectedExpressions} expressions, including newly added characters, match the exact 69-pixel visible height and y84 baseline released in v1.1.1 at 96 DIP / 100%.");
     }
 
     private static SpriteSizeMeasurement MeasureSprite(BitmapSource bitmap, string id, int stage, bool blink, int dipSize, double scale)

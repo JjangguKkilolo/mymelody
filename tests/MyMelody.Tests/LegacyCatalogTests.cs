@@ -9,24 +9,29 @@ namespace MyMelody.Tests;
 
 public sealed class LegacyCatalogTests : IDisposable
 {
-    // Freeze the shipped v1.0.2 IDs and storage format independently of the current catalog.
-    private static readonly string[] LegacyIds =
+    // Freeze the shipped catalogs and storage format independently of the current catalog.
+    private static readonly string[] Version102Ids =
         ["ribbon", "piano", "strawberry", "pajamas", "garden", "baking", "reading", "rain", "starry"];
+    private static readonly string[] Version111Ids = [.. Version102Ids, "sheep", "egg"];
     private readonly string _directory = Path.Combine(Path.GetTempPath(), "MyMelodyTests", Guid.NewGuid().ToString("N"));
     private readonly FakeTime _clock = new(new DateTimeOffset(2026, 9, 14, 12, 0, 0, TimeSpan.Zero));
     private PracticeManager Open() => new(_directory, _clock, TimeZoneInfo.Utc);
 
-    [Fact]
-    public void CompletedLegacyCollectionKeepsItsHistoryAndUnlocksOnlySheepAndEgg()
+    [Theory]
+    [InlineData(9, "v1.0.2")]
+    [InlineData(11, "v1.1.1")]
+    public void CompletedLegacyCollectionKeepsItsHistoryAndUnlocksOnlyAddedCharacters(int legacyCount, string legacyVersion)
     {
-        Assert.Equal(LegacyIds, CharacterCatalog.All.Take(9).Select(x => x.Id));
-        Assert.Equal(new[] { "sheep", "egg" }, CharacterCatalog.All.Skip(9).Select(x => x.Id));
-        string legacyBackup = WriteLegacyStore(36 * 3600);
+        string[] legacyIds = GetLegacyIds(legacyCount);
+        string[] addedIds = legacyCount == 9 ? ["sheep", "egg", "dinosaur"] : ["dinosaur"];
+        Assert.Equal(legacyIds, CharacterCatalog.All.Take(legacyCount).Select(x => x.Id));
+        Assert.Equal(addedIds, CharacterCatalog.All.Skip(legacyCount).Select(x => x.Id));
+        string legacyBackup = WriteLegacyStore(legacyIds, legacyVersion, 36 * 3600);
         string characters, sessions, settings;
         using (var legacy = Open())
         {
-            Assert.Equal(9 * 36 * 3600, legacy.TotalSeconds);
-            Assert.Equal("starry", legacy.State.GrowingCharacterId);
+            Assert.Equal(legacyCount * 36 * 3600, legacy.TotalSeconds);
+            Assert.Equal(legacyIds[^1], legacy.State.GrowingCharacterId);
             Assert.Equal("strawberry", legacy.State.DisplayCharacterId);
             Assert.True(legacy.State.CanDraw);
             Assert.False(legacy.IsPracticing);
@@ -42,10 +47,10 @@ public sealed class LegacyCatalogTests : IDisposable
         Assert.Equal(settings, JsonSerializer.Serialize(manager.Settings));
         var originalSessionIds = manager.Sessions.Select(x => x.Id).ToHashSet();
         var newIds = new HashSet<string>();
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < addedIds.Length; i++)
         {
             var added = manager.Draw();
-            Assert.Contains(added.Id, new[] { "sheep", "egg" });
+            Assert.Contains(added.Id, addedIds);
             Assert.True(newIds.Add(added.Id));
             Assert.Equal(0, added.PracticeSeconds);
             Assert.Equal(1, added.Stage);
@@ -63,12 +68,12 @@ public sealed class LegacyCatalogTests : IDisposable
             Assert.True(added.IsComplete);
             manager.StopManual();
         }
-        Assert.Equal(11, manager.State.Characters.Count);
+        Assert.Equal(12, manager.State.Characters.Count);
         Assert.False(manager.State.CanDraw);
         Assert.Throws<InvalidOperationException>(() => manager.Draw());
-        Assert.Equal(characters, JsonSerializer.Serialize(manager.State.Characters.Take(9)));
+        Assert.Equal(characters, JsonSerializer.Serialize(manager.State.Characters.Take(legacyCount)));
         Assert.Equal(sessions, JsonSerializer.Serialize(manager.Sessions.Where(x => originalSessionIds.Contains(x.Id))));
-        Assert.Equal(11 * 36 * 3600, manager.TotalSeconds);
+        Assert.Equal(12 * 36 * 3600, manager.TotalSeconds);
 
         string expandedBackup = Path.Combine(_directory, "expanded.zip");
         manager.Backup(expandedBackup);
@@ -79,28 +84,51 @@ public sealed class LegacyCatalogTests : IDisposable
         Assert.Equal(sessions, JsonSerializer.Serialize(manager.Sessions));
         Assert.Equal(settings, JsonSerializer.Serialize(manager.Settings));
         Assert.Equal("strawberry", manager.State.DisplayCharacterId);
-        Assert.Equal("starry", manager.State.GrowingCharacterId);
+        Assert.Equal(legacyIds[^1], manager.State.GrowingCharacterId);
         Assert.True(manager.State.CanDraw);
 
         manager.Restore(expandedBackup);
         Assert.Equal(expandedState, JsonSerializer.Serialize(manager.State));
         Assert.Equal(expandedSessions, JsonSerializer.Serialize(manager.Sessions));
+        Assert.Equal(settings, JsonSerializer.Serialize(manager.Settings));
         Assert.False(manager.State.CanDraw);
         manager.StartManual();
         Advance(manager, 30);
-        Assert.Equal(11 * 36 * 3600 + 30, manager.TotalSeconds);
+        Assert.Equal(12 * 36 * 3600 + 30, manager.TotalSeconds);
         Assert.All(manager.State.Characters, c => Assert.Equal(36 * 3600, c.PracticeSeconds));
         Assert.Equal(expandedState, JsonSerializer.Serialize(manager.State));
     }
 
-    [Fact]
-    public void UnfinishedLegacyCharacterMustFinishBeforeAnyAddedCharacterCanBeDrawn()
+    [Theory]
+    [InlineData(9, "v1.0.2")]
+    [InlineData(11, "v1.1.1")]
+    public void UnfinishedLegacyCharacterMustFinishBeforeAnyAddedCharacterCanBeDrawn(int legacyCount, string legacyVersion)
     {
-        WriteLegacyStore(13 * 3600);
+        string[] legacyIds = GetLegacyIds(legacyCount);
+        string[] addedIds = legacyCount == 9 ? ["sheep", "egg", "dinosaur"] : ["dinosaur"];
+        string legacyBackup = WriteLegacyStore(legacyIds, legacyVersion, 13 * 3600);
+        string state, sessions, settings;
+        using (var legacy = Open())
+        {
+            state = JsonSerializer.Serialize(legacy.State);
+            sessions = JsonSerializer.Serialize(legacy.Sessions);
+            settings = JsonSerializer.Serialize(legacy.Settings);
+            legacy.Save();
+        }
         using var manager = Open();
-        Assert.Equal(8 * 36 * 3600 + 13 * 3600, manager.TotalSeconds);
+        Assert.Equal(state, JsonSerializer.Serialize(manager.State));
+        Assert.Equal(sessions, JsonSerializer.Serialize(manager.Sessions));
+        Assert.Equal(settings, JsonSerializer.Serialize(manager.Settings));
+        manager.StartManual();
+        Advance(manager, 5);
+        manager.Restore(legacyBackup);
+        Assert.Equal(state, JsonSerializer.Serialize(manager.State));
+        Assert.Equal(sessions, JsonSerializer.Serialize(manager.Sessions));
+        Assert.Equal(settings, JsonSerializer.Serialize(manager.Settings));
+        Assert.False(manager.IsPracticing);
+        Assert.Equal((legacyCount - 1) * 36 * 3600 + 13 * 3600, manager.TotalSeconds);
         var growing = manager.State.GrowingCharacter!;
-        Assert.Equal("starry", growing.Id);
+        Assert.Equal(legacyIds[^1], growing.Id);
         Assert.Equal(13 * 3600, growing.PracticeSeconds);
         Assert.Equal(2, growing.Stage);
         Assert.False(manager.State.CanDraw);
@@ -114,22 +142,29 @@ public sealed class LegacyCatalogTests : IDisposable
         Assert.NotNull(growing.CompletedAt);
         Advance(manager, 60);
         var next = manager.Draw();
-        Assert.Contains(next.Id, new[] { "sheep", "egg" });
+        Assert.Contains(next.Id, addedIds);
         Assert.Equal(0, next.PracticeSeconds);
         Assert.Equal(36 * 3600, growing.PracticeSeconds);
-        Assert.Equal(9 * 36 * 3600 + 60, manager.TotalSeconds);
+        Assert.Equal(legacyCount * 36 * 3600 + 60, manager.TotalSeconds);
     }
 
-    private string WriteLegacyStore(double lastPracticeSeconds)
+    private static string[] GetLegacyIds(int count) => count switch
+    {
+        9 => Version102Ids,
+        11 => Version111Ids,
+        _ => throw new ArgumentOutOfRangeException(nameof(count))
+    };
+
+    private string WriteLegacyStore(string[] legacyIds, string legacyVersion, double lastPracticeSeconds)
     {
         Directory.CreateDirectory(_directory);
         string databasePath = Path.Combine(_directory, "practice.sqlite");
         var start = new DateTimeOffset(2026, 8, 1, 8, 0, 0, TimeSpan.Zero);
-        var characters = LegacyIds.Select((id, index) => new
+        var characters = legacyIds.Select((id, index) => new
         {
-            Id = id, PracticeSeconds = index == 8 ? lastPracticeSeconds : 36 * 3600,
+            Id = id, PracticeSeconds = index == legacyIds.Length - 1 ? lastPracticeSeconds : 36 * 3600,
             AcquiredAt = start.AddDays(index * 3),
-            CompletedAt = index == 8 && lastPracticeSeconds < 36 * 3600
+            CompletedAt = index == legacyIds.Length - 1 && lastPracticeSeconds < 36 * 3600
                 ? (DateTimeOffset?)null : start.AddDays(index * 3 + 2).AddHours(12)
         }).ToArray();
         using (var connection = new SqliteConnection($"Data Source={databasePath};Pooling=False"))
@@ -148,7 +183,7 @@ public sealed class LegacyCatalogTests : IDisposable
                 """;
             command.Parameters.AddWithValue("$json", JsonSerializer.Serialize(new
             {
-                State = new { Characters = characters, GrowingCharacterId = "starry", DisplayCharacterId = "strawberry" },
+                State = new { Characters = characters, GrowingCharacterId = legacyIds[^1], DisplayCharacterId = "strawberry" },
                 Settings = new
                 {
                     MidiDeviceId = "legacy-keyboard", CharacterSize = 144, CharacterLeft = 80, CharacterTop = 120,
@@ -178,14 +213,14 @@ public sealed class LegacyCatalogTests : IDisposable
                 }
             }
         }
-        string backupPath = Path.Combine(_directory, "v1.0.2-legacy.zip");
+        string backupPath = Path.Combine(_directory, $"{legacyVersion}-legacy.zip");
         byte[] database = File.ReadAllBytes(databasePath);
         using var archive = ZipFile.Open(backupPath, ZipArchiveMode.Create);
         using (var stream = archive.CreateEntry("practice.sqlite").Open()) stream.Write(database);
         using var manifest = archive.CreateEntry("manifest.json").Open();
         JsonSerializer.Serialize(manifest, new
         {
-            Application = "MyMelodyPractice", SchemaVersion = 1, CreatedAt = start.AddDays(30),
+            Application = "MyMelodyPractice", SchemaVersion = 1, CreatedAt = start.AddDays(legacyIds.Length * 3 + 1),
             Sha256 = Convert.ToHexString(SHA256.HashData(database))
         });
         return backupPath;

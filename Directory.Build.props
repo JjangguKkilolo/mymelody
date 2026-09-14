@@ -1,1 +1,1 @@
-<Project><PropertyGroup><Nullable>enable</Nullable><ImplicitUsings>enable</ImplicitUsings><LangVersion>latest</LangVersion><Version Condition="'$(Version)' == ''">1.1.1</Version><Deterministic>true</Deterministic></PropertyGroup></Project>
+<Project><PropertyGroup><Nullable>enable</Nullable><ImplicitUsings>enable</ImplicitUsings><LangVersion>latest</LangVersion><Version Condition="'$(Version)' == ''">1.2.0</Version><Deterministic>true</Deterministic></PropertyGroup></Project>

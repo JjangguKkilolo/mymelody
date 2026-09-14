@@ -10,6 +10,9 @@ internal static class SpritePresentation
 {
     private const double CanvasSize = 512;
     private const double ContentLimit = 480;
+    // Preserve the shipped v1.1.1 height (its widest costume was 419 by 368 pixels).
+    // New costumes must fit this size instead of resizing every existing friend.
+    private const double VisibleHeight = 480d * 368 / 419;
     private const double Baseline = 496;
     private const byte VisibleAlpha = 16;
     private const int EdgePadding = 2;
@@ -40,13 +43,12 @@ internal static class SpritePresentation
             }
         }
 
-        // Every appearance has the same height. The widest costume sets the available width.
-        double widestAspect = pairs.Count == 0 ? 1 : pairs.Max(pair => pair.Width / (double)pair.Height);
-        double height = ContentLimit / Math.Max(1, widestAspect);
         var result = new Dictionary<(string, int, bool), ImageSource>();
         foreach (var pair in pairs)
         {
-            double scale = height / pair.Height;
+            double scale = VisibleHeight / pair.Height;
+            if (pair.Width * scale > ContentLimit + 0.001)
+                throw new InvalidDataException($"Character {pair.Id}, stage {pair.Stage}, is too wide for the fixed display size; keep its costume and props more compact.");
             result[(pair.Id, pair.Stage, false)] = Draw(pair.Open, scale);
             result[(pair.Id, pair.Stage, true)] = Draw(pair.Blink, scale);
         }

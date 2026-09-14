@@ -11,7 +11,8 @@ public sealed record CharacterDefinition(string Id, string Name, string Emoji, s
         "garden" => "매일 조금씩 피어나는 마음", "baking" => "차곡차곡 구워지는 자신감",
         "reading" => "한 페이지씩 쌓이는 이야기", "rain" => "빗소리와 함께하는 작은 연주",
         "starry" => "별빛 아래에서 만나는 단짝", "sheep" => "몽실몽실 포근하게 감싸는 응원",
-        "egg" => "작은 껍질에서 피어나는 새 멜로디", _ => "함께 연습하며 자라는 단짝"
+        "egg" => "작은 껍질에서 피어나는 새 멜로디", "dinosaur" => "작은 발걸음으로 함께하는 음악 탐험",
+        _ => "함께 연습하며 자라는 단짝"
     };
 }
 
@@ -29,7 +30,8 @@ public static class CharacterCatalog
         new CharacterDefinition("rain", "비 오는 날", "☂", "#B9D8E7"),
         new CharacterDefinition("starry", "별밤", "✦", "#C1C5E8"),
         new CharacterDefinition("sheep", "양", "🐑", "#E7DBEC"),
-        new CharacterDefinition("egg", "계란", "🥚", "#F5DFAD")
+        new CharacterDefinition("egg", "계란", "🥚", "#F5DFAD"),
+        new CharacterDefinition("dinosaur", "공룡", "🦕", "#F2BDD0")
     });
     public static CharacterDefinition Get(string id) => All.FirstOrDefault(x => x.Id == id)
         ?? throw new ArgumentException("알 수 없는 캐릭터입니다.", nameof(id));

@@ -47,6 +47,7 @@ internal static class UiSmoke
             throw new InvalidDataException("A thirty-minute break must display a new session.");
         checks.Add("23-second and30-second records share one53-second session; thirty-minute rest separates the next session without idle credit.");
         host.Main.Refresh();
+        VerifyCollectionStageSelection(host, clock, output, checks);
         foreach (var page in new[] { "Home", "Collection", "Records", "Settings" })
         {
             host.Main.Navigate(page);
@@ -57,6 +58,9 @@ internal static class UiSmoke
         checks.Add("All four views render at 100%,150%,200% with actual PNG sprites.");
         host.Main.Width = host.Main.MinWidth; host.Main.Height = host.Main.MinHeight;
         host.Main.Navigate("Home"); Render(host.Main, output, "home-minimum", 1);
+        host.Main.Navigate("Collection"); Render(host.Main, output, "collection-minimum", 1);
+        host.Main.PageScroll.ScrollToBottom(); Render(host.Main, output, "collection-minimum-bottom", 1);
+        VerifyNarrowCollection(host.Main, output, checks);
         VerifySprites(output, checks);
         VerifyUniformSpriteSizes(output, checks);
         var backup = Path.Combine(output, "roundtrip.zip");
@@ -66,6 +70,214 @@ internal static class UiSmoke
         if (manager.TotalSeconds != before || manager.State.GrowingCharacter?.Id != current.Id) throw new InvalidDataException("UI backup roundtrip failed.");
         checks.Add("UI backing state persists and roundtrips backup after7 unique draws.");
         File.WriteAllText(Path.Combine(output, "result.json"), JsonSerializer.Serialize(new { success = true, checks, manager.DataDirectory, totalSeconds = manager.TotalSeconds }, new JsonSerializerOptions { WriteIndented = true }));
+    }
+
+    private static void VerifyCollectionStageSelection(AppHost host, UiSmokeClock clock, string output, List<string> checks)
+    {
+        var manager = host.Manager;
+        bool originalVisibility = manager.Settings.CharacterVisible;
+        // Exercise the real popup sprite without displaying a window on the user's desktop.
+        manager.Settings.CharacterVisible = false;
+        manager.Save();
+        try
+        {
+            host.Main.Navigate("Collection"); host.Main.Refresh(); host.Main.UpdateLayout();
+            host.Pet.Refresh();
+            var growingId = manager.State.GrowingCharacterId ?? throw new InvalidDataException("Stage-selection fixture has no growing character.");
+            var completedId = manager.State.Characters.First(character => character.IsComplete).Id;
+            var unownedId = CharacterCatalog.All.First(character => manager.State.Characters.All(owned => owned.Id != character.Id)).Id;
+            RequireStage(manager.State.GrowingCharacter?.Stage == 2, "Stage-selection fixture must have a character at stage 2.");
+            var growingCard = CollectionCardFor(host.Main, growingId);
+            RequireStage(manager.State.DisplayStage == null && growingCard.PreviewStage == 2 && growingCard.ApplyButton.IsEnabled,
+                "An automatically displayed current stage must still allow explicitly fixing that appearance.");
+            RequireStage(growingCard.StageButtons.Count == 3 && growingCard.StageButtons[0].IsEnabled && growingCard.StageButtons[1].IsEnabled && !growingCard.StageButtons[2].IsEnabled,
+                "A stage-2 character must unlock only its first two previews.");
+            var lockedCard = CollectionCardFor(host.Main, unownedId);
+            RequireStage(lockedCard.StageButtons.Count == 3 && lockedCard.StageButtons.All(button => !button.IsEnabled) &&
+                (lockedCard.ApplyButton.Visibility != Visibility.Visible || !lockedCard.ApplyButton.IsEnabled),
+                "An unowned character must not allow stage selection or display application.");
+
+            var beforePreview = CaptureStageState(manager);
+            var beforePet = PetIdentity(host);
+            ClickStageButton(growingCard.StageButtons[0]);
+            growingCard = CollectionCardFor(host.Main, growingId);
+            RequireStage(growingCard.PreviewStage == 1 && growingCard.Sprite.CharacterId == growingId && growingCard.Sprite.Stage == 1,
+                "Clicking stage 1 must preview stage 1 in its collection card.");
+            RequireStage(CaptureStageState(manager) == beforePreview && PetIdentity(host) == beforePet,
+                "Previewing a stage changed saved state, experience, sessions, or the desktop character.");
+            RequireHomeGrowth(host, growingId, 2);
+            host.Main.Refresh(); host.Main.UpdateLayout();
+            RequireStage(CollectionCardFor(host.Main, growingId).PreviewStage == 1, "Refreshing the collection discarded its stage preview.");
+
+            ClickStageButton(CollectionCardFor(host.Main, growingId).ApplyButton);
+            RequireDisplay(host, growingId, 1, 1);
+            RequireHomeGrowth(host, growingId, 2);
+            RequireSavedDisplay(manager, growingId, 1);
+            RequireStage(!CollectionCardFor(host.Main, growingId).ApplyButton.IsEnabled, "An already fixed appearance should not need to be applied again.");
+
+            double growthBefore = manager.State.GrowingCharacter!.PracticeSeconds;
+            manager.StartManual(); clock.Advance(TimeSpan.FromSeconds(1)); manager.Tick(); manager.StopManual();
+            host.Main.Refresh(); host.Pet.Refresh(); host.Main.UpdateLayout();
+            RequireStage(manager.State.GrowingCharacter!.PracticeSeconds == growthBefore + 1 && manager.State.GrowingCharacter.Stage == 2,
+                "The stage-selection fixture must advance exactly one practice second without changing growth stage.");
+            RequireDisplay(host, growingId, 1, 1);
+            RequireStage(CollectionCardFor(host.Main, growingId).PreviewStage == 1, "A practice update discarded the selected earlier appearance.");
+
+            string backup = Path.Combine(output, "stage-selection-roundtrip.zip");
+            manager.Backup(backup);
+            double backedUpSeconds = manager.TotalSeconds;
+            string backedUpSessions = JsonSerializer.Serialize(manager.Sessions);
+            string unchangedGrowth = GrowthIdentity(manager);
+            host.Main.PageScroll.ScrollToVerticalOffset(Math.Min(150, host.Main.PageScroll.ScrollableHeight / 2));
+            host.Main.UpdateLayout();
+            double collectionOffset = host.Main.PageScroll.VerticalOffset;
+            RequireStage(collectionOffset > 0, "The collection fixture must be scrollable for preview-position checks.");
+            for (var stage = 1; stage <= 3; stage++)
+            {
+                var completedCard = CollectionCardFor(host.Main, completedId);
+                RequireStage(completedCard.StageButtons.All(button => button.IsEnabled) && completedCard.FollowGrowthButton.Visibility == Visibility.Collapsed,
+                    "Completed characters must unlock all stage previews and hide follow-growth mode.");
+                beforePreview = CaptureStageState(manager); beforePet = PetIdentity(host);
+                ClickStageButton(completedCard.StageButtons[stage - 1]);
+                completedCard = CollectionCardFor(host.Main, completedId);
+                RequireStage(completedCard.PreviewStage == stage && completedCard.Sprite.Stage == stage,
+                    $"Completed character did not preview stage {stage}.");
+                RequireStage(CaptureStageState(manager) == beforePreview && PetIdentity(host) == beforePet,
+                    "A completed-character preview changed saved or desktop state before application.");
+                ClickStageButton(completedCard.ApplyButton);
+                RequireDisplay(host, completedId, stage, stage);
+                RequireHomeGrowth(host, growingId, 2);
+                RequireStage(GrowthIdentity(manager) == unchangedGrowth, "Displaying a completed character altered the actual growing character or practice records.");
+                host.Main.UpdateLayout();
+                RequireStage(CollectionCardFor(host.Main, growingId).PreviewStage == 1, "Rebuilding collection cards lost another character's preview.");
+                RequireStage(Math.Abs(host.Main.PageScroll.VerticalOffset - collectionOffset) <= 0.5,
+                    "Applying an appearance moved the collection scroll position.");
+            }
+
+            manager.Restore(backup);
+            host.Main.Refresh(); host.Pet.Refresh(); host.Main.UpdateLayout();
+            RequireDisplay(host, growingId, 1, 1);
+            RequireSavedDisplay(manager, growingId, 1);
+            RequireStage(manager.TotalSeconds == backedUpSeconds && JsonSerializer.Serialize(manager.Sessions) == backedUpSessions,
+                "Restoring a selected stage changed the original practice records.");
+            RequireHomeGrowth(host, growingId, 2);
+
+            growingCard = CollectionCardFor(host.Main, growingId);
+            RequireStage(growingCard.FollowGrowthButton.Visibility == Visibility.Visible, "Growing characters must offer follow-growth mode.");
+            ClickStageButton(growingCard.FollowGrowthButton);
+            RequireDisplay(host, growingId, null, 2);
+            RequireSavedDisplay(manager, growingId, null);
+            RequireHomeGrowth(host, growingId, 2);
+            RequireStage(GrowthIdentity(manager) == unchangedGrowth, "Switching to follow-growth changed experience or records.");
+
+            // Leave a real earlier-stage preview in the collection screenshots while the popup follows growth.
+            ClickStageButton(CollectionCardFor(host.Main, growingId).StageButtons[0]);
+            host.Main.Navigate("Home"); host.Main.Navigate("Collection"); host.Main.UpdateLayout();
+            RequireStage(CollectionCardFor(host.Main, growingId).PreviewStage == 1, "Returning to the collection lost a preview selection.");
+            RequireDisplay(host, growingId, null, 2);
+            File.WriteAllText(Path.Combine(output, "stage-selection-checks.json"), JsonSerializer.Serialize(new
+            {
+                success = true, growingCharacterId = growingId, actualGrowthStage = 2,
+                completedCharacterId = completedId, unownedCharacterId = unownedId,
+                checkedCompletedStages = new[] { 1, 2, 3 }, fixedStageRestoredFromBackup = 1,
+                finalDisplayStage = manager.State.DisplayStage, finalEffectiveStage = manager.State.EffectiveDisplayStage,
+                finalPreviewStage = CollectionCardFor(host.Main, growingId).PreviewStage, collectionOffset
+            }, new JsonSerializerOptions { WriteIndented = true }));
+            checks.Add("Real collection buttons preview unlocked stages without changing saved state, popup, experience, or sessions; future and unowned stages stay locked.");
+            checks.Add("Fixed stage 1 survives practice and backup restore; completed characters can display all three stages independently of stage-2 growth, and follow-growth restores the current appearance.");
+            checks.Add("Collection refresh, display application, and navigation preserve preview selection; applying an appearance preserves scroll position and the home view always shows actual growth.");
+        }
+        finally
+        {
+            manager.Settings.CharacterVisible = originalVisibility;
+            host.Main.LoadSettings();
+        }
+    }
+
+    private sealed record StageStateSnapshot(string State, string SavedState, string Sessions);
+    private static StageStateSnapshot CaptureStageState(PracticeManager manager) => new(
+        JsonSerializer.Serialize(manager.State), ReadSavedState(manager), JsonSerializer.Serialize(manager.Sessions));
+    private static string GrowthIdentity(PracticeManager manager) => JsonSerializer.Serialize(new { manager.State.GrowingCharacterId, manager.State.Characters, manager.Sessions });
+    private static (string? Id, int Stage) PetIdentity(AppHost host) => host.Pet.Content is SpriteView sprite
+        ? (sprite.CharacterId, sprite.Stage) : throw new InvalidDataException("Desktop character content is not a SpriteView.");
+    private static CollectionCard CollectionCardFor(MainWindow window, string id)
+    {
+        var grid = window.FindName("CollectionGrid") as Panel ?? throw new InvalidDataException("Collection panel is missing.");
+        return grid.Children.OfType<CollectionCard>().Single(card => card.CharacterId == id);
+    }
+    private static void ClickStageButton(Button button)
+    {
+        RequireStage(button.IsEnabled && button.Visibility == Visibility.Visible, "The stage-selection test attempted to click a locked or hidden button.");
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, button));
+    }
+    private static void RequireDisplay(AppHost host, string id, int? fixedStage, int effectiveStage)
+    {
+        RequireStage(host.Manager.State.DisplayCharacterId == id && host.Manager.State.DisplayStage == fixedStage &&
+            host.Manager.State.EffectiveDisplayStage == effectiveStage && PetIdentity(host) == (id, effectiveStage),
+            $"Desktop selection does not match {id}, fixed stage {fixedStage?.ToString() ?? "automatic"}, effective stage {effectiveStage}.");
+    }
+    private static void RequireHomeGrowth(AppHost host, string id, int stage)
+    {
+        host.Main.Refresh();
+        var hero = host.Main.FindName("HeroSprite") as SpriteView;
+        RequireStage(host.Manager.State.GrowingCharacterId == id && host.Manager.State.GrowingCharacter?.Stage == stage &&
+            hero?.CharacterId == id && hero.Stage == stage, "Home or actual growth followed a display-only stage selection.");
+    }
+    private static string ReadSavedState(PracticeManager manager)
+    {
+        using var connection = new Microsoft.Data.Sqlite.SqliteConnection(new Microsoft.Data.Sqlite.SqliteConnectionStringBuilder
+        {
+            DataSource = Path.Combine(manager.DataDirectory, "practice.sqlite"), Mode = Microsoft.Data.Sqlite.SqliteOpenMode.ReadOnly, Pooling = false
+        }.ToString());
+        connection.Open();
+        using var command = connection.CreateCommand();
+        command.CommandText = "SELECT json FROM app_state WHERE id=1;";
+        return command.ExecuteScalar() as string ?? throw new InvalidDataException("Saved application state is missing.");
+    }
+    private static void RequireSavedDisplay(PracticeManager manager, string id, int? stage)
+    {
+        using var saved = JsonDocument.Parse(ReadSavedState(manager));
+        var state = saved.RootElement.GetProperty("State");
+        var storedStage = state.GetProperty("DisplayStage");
+        RequireStage(state.GetProperty("DisplayCharacterId").GetString() == id &&
+            (stage.HasValue ? storedStage.ValueKind == JsonValueKind.Number && storedStage.GetInt32() == stage : storedStage.ValueKind == JsonValueKind.Null),
+            "The display stage was not persisted to SQLite.");
+    }
+    private static void RequireStage(bool condition, string message)
+    {
+        if (!condition) throw new InvalidDataException(message);
+    }
+
+    private static void VerifyNarrowCollection(MainWindow window, string output, List<string> checks)
+    {
+        double previousMinimum = window.MinWidth, previousWidth = window.Width;
+        try
+        {
+            window.MinWidth = 760; window.Width = 760;
+            window.Navigate("Collection"); window.UpdateLayout();
+            var grid = window.FindName("CollectionGrid") as System.Windows.Controls.Primitives.UniformGrid
+                ?? throw new InvalidDataException("Collection grid is missing.");
+            RequireStage(grid.Columns == 2, "A 760-DIP management window must arrange collection cards in two columns.");
+            foreach (var card in grid.Children.OfType<CollectionCard>())
+            foreach (var button in card.StageButtons)
+            {
+                var origin = button.TranslatePoint(new Point(), card);
+                var label = new FormattedText(button.Content?.ToString() ?? "", System.Globalization.CultureInfo.CurrentUICulture,
+                    button.FlowDirection, new Typeface(button.FontFamily, button.FontStyle, button.FontWeight, button.FontStretch),
+                    button.FontSize, Brushes.Black, VisualTreeHelper.GetDpi(button).PixelsPerDip);
+                double textWidth = button.ActualWidth - button.Padding.Left - button.Padding.Right - button.BorderThickness.Left - button.BorderThickness.Right;
+                RequireStage(button.ActualWidth > 0 && origin.X >= -0.5 && origin.X + button.ActualWidth <= card.ActualWidth + 0.5 &&
+                    label.WidthIncludingTrailingWhitespace <= textWidth + 0.5,
+                    $"A stage button is clipped in the narrow {card.CharacterId} collection card.");
+            }
+            Render(window, output, "collection-narrow", 1);
+            window.PageScroll.ScrollToBottom(); Render(window, output, "collection-narrow-bottom", 1);
+            checks.Add("At 760 DIP window width the collection uses two columns, with every stage button and its label fully inside its card.");
+        }
+        finally
+        {
+            window.MinWidth = previousMinimum; window.Width = previousWidth;
+        }
     }
 
     private static void VerifySprites(string output, List<string> checks)

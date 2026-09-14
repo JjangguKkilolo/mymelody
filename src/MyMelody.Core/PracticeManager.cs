@@ -147,23 +147,38 @@ public sealed class PracticeManager : IDisposable
         var character = new CharacterProgress { Id = available[RandomNumberGenerator.GetInt32(available.Length)].Id, AcquiredAt = _time.GetUtcNow() };
         string? previousGrowing = State.GrowingCharacterId;
         string? previousDisplay = State.DisplayCharacterId;
+        int? previousDisplayStage = State.DisplayStage;
         State.Characters.Add(character);
         State.GrowingCharacterId = State.DisplayCharacterId = character.Id;
+        State.DisplayStage = null;
         try { SaveCore(); }
         catch
         {
             State.Characters.Remove(character); State.GrowingCharacterId = previousGrowing; State.DisplayCharacterId = previousDisplay;
+            State.DisplayStage = previousDisplayStage;
             throw;
         }
         Notify();
         return character;
     }
 
-    public void SelectDisplay(string characterId)
+    public void SelectDisplay(string characterId, int? stage = null)
     {
         ThrowIfDisposed();
-        if (!State.Characters.Any(x => x.Id == characterId)) throw new InvalidOperationException("먼저 이 마이멜로디를 만나 주세요.");
-        State.DisplayCharacterId = characterId; SaveCore(); Notify();
+        var character = State.Characters.FirstOrDefault(x => x.Id == characterId)
+            ?? throw new InvalidOperationException("먼저 이 마이멜로디를 만나 주세요.");
+        if (stage is < 1 or > 3) throw new ArgumentOutOfRangeException(nameof(stage), "표시 단계는 1~3단계에서 선택해 주세요.");
+        if (stage > character.Stage) throw new InvalidOperationException("아직 도달하지 않은 성장 단계입니다.");
+        string? previousDisplay = State.DisplayCharacterId;
+        int? previousStage = State.DisplayStage;
+        State.DisplayCharacterId = characterId; State.DisplayStage = stage;
+        try { SaveCore(); }
+        catch
+        {
+            State.DisplayCharacterId = previousDisplay; State.DisplayStage = previousStage;
+            throw;
+        }
+        Notify();
     }
 
     public IReadOnlyList<DailyPracticeStat> GetDailyStats() => _sessions

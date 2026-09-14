@@ -53,7 +53,7 @@ public sealed class PetWindow : Window
         var settings = manager.Settings;
         var character = manager.State.Characters.FirstOrDefault(x => x.Id == manager.State.DisplayCharacterId)
             ?? manager.State.Characters.FirstOrDefault(x => x.Id == manager.State.GrowingCharacterId);
-        _sprite.ShowCharacter(character?.Id, character?.Stage ?? 1);
+        _sprite.ShowCharacter(character?.Id, manager.State.EffectiveDisplayStage);
         _sprite.IsPlaying = manager.IsPracticing;
         var newSize = Math.Clamp(settings.CharacterSize, 48, 384);
         bool sizeChanged = Width != newSize;

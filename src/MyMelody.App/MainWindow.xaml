@@ -69,9 +69,9 @@
       <TextBlock Text="잘 치는 날도, 천천히 반복하는 날도. 모든 연습이 같은 속도로 성장이 돼요." Style="{StaticResource Caption}" Margin="4,16,4,6"/>
      </StackPanel>
      <StackPanel x:Name="CollectionPage" Visibility="Collapsed">
-      <TextBlock Text="한 친구와 36시간을 함께하면, 다음 친구를 만날 수 있어요." Style="{StaticResource Caption}" Margin="0,0,0,18"/>
-      <UniformGrid x:Name="CollectionGrid" Columns="3"/>
-      <TextBlock Text="완성한 친구를 바탕화면에 꺼내 두어도 지금 키우는 친구는 계속 성장해요." Style="{StaticResource Caption}" Margin="4,10,0,0"/>
+      <TextBlock Text="도달한 단계까지 골라 보고, 마음에 드는 모습을 바탕화면에 표시해요.&#x0a;2단계 친구는 1·2단계, 3단계 친구는 모든 모습을 선택할 수 있어요." Style="{StaticResource Caption}" Margin="0,0,0,18"/>
+      <UniformGrid x:Name="CollectionGrid" Columns="3" SizeChanged="CollectionSizeChanged"/>
+      <TextBlock Text="이전 모습을 표시해도 연습 기록과 성장은 계속 쌓여요. ‘성장에 맞춰 표시’를 누르면 성장할 때 모습도 함께 바뀌어요." Style="{StaticResource Caption}" Margin="4,10,0,0"/>
      </StackPanel>
      <StackPanel x:Name="RecordsPage" Visibility="Collapsed">
       <Border Style="{StaticResource Card}" Margin="0,0,0,16"><DockPanel><TextBlock Text="지금까지 함께한 시간" Style="{StaticResource Caption}" VerticalAlignment="Center"/><TextBlock x:Name="AllTimeTotal" DockPanel.Dock="Right" Text="0분" FontSize="24" FontWeight="Bold" HorizontalAlignment="Right"/></DockPanel></Border>

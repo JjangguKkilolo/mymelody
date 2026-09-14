@@ -33,6 +33,8 @@ public sealed class LegacyCatalogTests : IDisposable
             Assert.Equal(legacyCount * 36 * 3600, legacy.TotalSeconds);
             Assert.Equal(legacyIds[^1], legacy.State.GrowingCharacterId);
             Assert.Equal("strawberry", legacy.State.DisplayCharacterId);
+            Assert.Null(legacy.State.DisplayStage);
+            Assert.Equal(3, legacy.State.EffectiveDisplayStage);
             Assert.True(legacy.State.CanDraw);
             Assert.False(legacy.IsPracticing);
             characters = JsonSerializer.Serialize(legacy.State.Characters);
@@ -110,6 +112,8 @@ public sealed class LegacyCatalogTests : IDisposable
         string state, sessions, settings;
         using (var legacy = Open())
         {
+            Assert.Null(legacy.State.DisplayStage);
+            Assert.Equal(3, legacy.State.EffectiveDisplayStage);
             state = JsonSerializer.Serialize(legacy.State);
             sessions = JsonSerializer.Serialize(legacy.Sessions);
             settings = JsonSerializer.Serialize(legacy.Settings);

@@ -119,6 +119,9 @@ internal sealed class PracticeStore : IDisposable
             state.Characters.Any(x => !x.IsComplete && x.Id != state.GrowingCharacterId) ||
             (state.Characters.Count > 0 && (state.DisplayCharacterId is null || state.GrowingCharacterId is null)))
             throw new InvalidDataException("육성 또는 표시 캐릭터 정보가 올바르지 않습니다.");
+        if (state.DisplayStage is int displayStage &&
+            (state.DisplayCharacter is not { } displayCharacter || displayStage < 1 || displayStage > displayCharacter.Stage))
+            throw new InvalidDataException("저장된 표시 단계가 올바르지 않습니다.");
         var sessionIds = new HashSet<string>(StringComparer.Ordinal);
         foreach (var session in sessions)
         {

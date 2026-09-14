@@ -62,8 +62,10 @@ public sealed class AppState
     public List<CharacterProgress> Characters { get; set; } = [];
     public string? GrowingCharacterId { get; set; }
     public string? DisplayCharacterId { get; set; }
+    public int? DisplayStage { get; set; }
     [JsonIgnore] public CharacterProgress? GrowingCharacter => Characters.FirstOrDefault(x => x.Id == GrowingCharacterId);
     [JsonIgnore] public CharacterProgress? DisplayCharacter => Characters.FirstOrDefault(x => x.Id == DisplayCharacterId);
+    [JsonIgnore] public int EffectiveDisplayStage => DisplayStage ?? DisplayCharacter?.Stage ?? 1;
     [JsonIgnore] public bool CanDraw => Characters.Count < CharacterCatalog.All.Count && (GrowingCharacter is null || GrowingCharacter.IsComplete);
 }
 

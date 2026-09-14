@@ -18,6 +18,7 @@ public partial class MainWindow : Window
     private DateTime _month = new(DateTime.Today.Year, DateTime.Today.Month, 1);
     private DateOnly? _selectedDay;
     private string _collectionSignature = "";
+    private readonly Dictionary<string, int> _collectionPreviewStages = new(StringComparer.Ordinal);
     private DateTime _lastRecordsRefresh = DateTime.MinValue;
     private readonly DispatcherTimer _toastTimer = new() { Interval = TimeSpan.FromSeconds(6) };
     private PracticeManager Manager => _host.Manager;
@@ -108,28 +109,37 @@ public partial class MainWindow : Window
     }
     private void RefreshCollection(bool force = false)
     {
-        var signature = string.Join("|", Manager.State.Characters.Select(x => $"{x.Id}:{x.Stage}:{x.IsComplete}")) + Manager.State.DisplayCharacterId;
+        var signature = string.Join("|", Manager.State.Characters.Select(x => $"{x.Id}:{x.Stage}:{x.IsComplete}"))
+            + $"|{Manager.State.DisplayCharacterId}:{Manager.State.DisplayStage}";
         if (!force && signature == _collectionSignature) return;
         _collectionSignature = signature;
+        string? focusedCharacter = CollectionGrid.Children.OfType<CollectionCard>()
+            .FirstOrDefault(card => card.IsKeyboardFocusWithin)?.CharacterId;
         CollectionGrid.Children.Clear();
         foreach (var definition in CharacterCatalog.All)
         {
             var owned = Manager.State.Characters.FirstOrDefault(x => x.Id == definition.Id);
-            var panel = new StackPanel();
-            var sprite = new SpriteView { Height = 125, Width = 140, Opacity = owned == null ? 0.22 : 1 };
-            sprite.ShowCharacter(owned?.Id ?? definition.Id, owned?.Stage ?? 1);
-            panel.Children.Add(sprite);
-            panel.Children.Add(new TextBlock { Text = definition.Name, FontSize = 15, FontWeight = FontWeights.SemiBold, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 5, 0, 6) });
-            panel.Children.Add(new TextBlock { Text = owned == null ? "아직 만나지 못했어요" : owned.IsComplete ? "성장 완료 ♡" : $"{owned.Stage}단계 · 함께 자라는 중", FontSize = 11, Foreground = Brush("#967B89"), HorizontalAlignment = HorizontalAlignment.Center });
-            if (owned != null)
+            int previewStage = _collectionPreviewStages.TryGetValue(definition.Id, out int selectedStage) ? selectedStage
+                : Manager.State.DisplayCharacterId == definition.Id ? Manager.State.EffectiveDisplayStage : owned?.Stage ?? 1;
+            var card = new CollectionCard(definition, owned, previewStage, Manager.State.DisplayCharacterId, Manager.State.DisplayStage);
+            card.PreviewChanged += stage => _collectionPreviewStages[definition.Id] = stage;
+            card.DisplayRequested += stage => Run(() =>
             {
-                var button = new Button { Content = Manager.State.DisplayCharacterId == owned.Id ? "바탕화면에 함께하는 중" : "바탕화면에 표시", FontSize = 10, Padding = new Thickness(6, 7, 6, 7), Margin = new Thickness(0, 12, 0, 0) };
-                button.Click += (_, _) => Run(() => { Manager.SelectDisplay(owned.Id); RefreshCollection(true); _host.Pet.Refresh(); });
-                panel.Children.Add(button);
-            }
-            CollectionGrid.Children.Add(new Border { Style = (Style)FindResource("Card"), Margin = new Thickness(0, 0, 10, 12), Padding = new Thickness(12), Child = panel });
+                Manager.SelectDisplay(definition.Id, stage);
+                _collectionPreviewStages[definition.Id] = Manager.State.EffectiveDisplayStage;
+                RefreshCollection(true);
+                _host.Pet.Refresh();
+            });
+            CollectionGrid.Children.Add(card);
+        }
+        if (focusedCharacter != null)
+        {
+            var focusedCard = CollectionGrid.Children.OfType<CollectionCard>().FirstOrDefault(card => card.CharacterId == focusedCharacter);
+            focusedCard?.StageButtons[focusedCard.PreviewStage - 1].Focus();
         }
     }
+    private void CollectionSizeChanged(object sender, SizeChangedEventArgs e)
+        => CollectionGrid.Columns = Math.Clamp((int)(e.NewSize.Width / 190), 1, 3);
     private void RefreshRecords()
     {
         _lastRecordsRefresh = DateTime.Now;
@@ -224,7 +234,7 @@ public partial class MainWindow : Window
         var dialog = new OpenFileDialog { Filter = "마이멜로디 백업 (*.zip)|*.zip" };
         if (dialog.ShowDialog(this) != true) return;
         if (MessageBox.Show(this, "현재 기록을 먼저 백업하고 선택한 기록으로 복원할까요?", "백업 복원", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes) return;
-        Run(() => { Manager.Restore(dialog.FileName); _host.Midi.SelectDevice(Manager.Settings.MidiDeviceId); LoadSettings(); _host.ApplySettings(syncAutoStart: true); _collectionSignature = ""; Refresh(); _host.Pet.ApplySavedPosition(); Toast("기록과 친구들을 복원했어요."); });
+        Run(() => { Manager.Restore(dialog.FileName); _host.Midi.SelectDevice(Manager.Settings.MidiDeviceId); LoadSettings(); _host.ApplySettings(syncAutoStart: true); _collectionSignature = ""; _collectionPreviewStages.Clear(); Refresh(); _host.Pet.ApplySavedPosition(); Toast("기록과 친구들을 복원했어요."); });
     }
     private void OpenDataClick(object sender, RoutedEventArgs e) => Run(() => Process.Start(new ProcessStartInfo(Manager.DataDirectory) { UseShellExecute = true }));
     private async void CheckUpdateClick(object sender, RoutedEventArgs e) { try { await _host.Updates.CheckAsync(); RefreshUpdate(); } catch (Exception ex) { _host.ReportError(ex); } }

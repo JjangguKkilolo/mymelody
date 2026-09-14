@@ -15,7 +15,7 @@
       <TextBlock Text="오늘도 함께해요 ♡" FontWeight="SemiBold" FontSize="12"/>
       <TextBlock x:Name="SidebarStatus" Text="건반을 연결해 주세요" Style="{StaticResource Caption}" Margin="0,6,0,0"/>
      </StackPanel></Border>
-     <TextBlock x:Name="VersionLabel" Text="v1.0.0 · 나만의 연습 공간" Style="{StaticResource Caption}" Margin="0,14,0,0" FontSize="10"/>
+     <TextBlock x:Name="VersionLabel" Text="나만의 연습 공간" Style="{StaticResource Caption}" Margin="0,14,0,0" FontSize="10"/>
     </StackPanel>
     <StackPanel>
      <Button x:Name="HomeNav" Style="{StaticResource NavButton}" Content="⌂   함께 연습하기" Tag="Home" Click="NavigateClick"/>
@@ -81,6 +81,7 @@
        <UniformGrid x:Name="CalendarGrid" Columns="7"/>
       </StackPanel></Border>
       <TextBlock Text="연습 세션" Style="{StaticResource SectionTitle}"/>
+      <TextBlock Text="연습 구간 사이의 휴식이 30분 미만이면 한 세션으로 묶어요. 인정 시간만 합산해요." Style="{StaticResource Caption}" Margin="0,0,0,12"/>
       <TextBlock x:Name="SessionEmpty" Text="첫 연습을 시작하면 여기에 기록이 남아요." Style="{StaticResource Caption}" Margin="0,0,0,10"/>
       <StackPanel x:Name="SessionsList"/>
      </StackPanel>
@@ -106,7 +107,7 @@
       </StackPanel></Border>
       <Border Style="{StaticResource Card}" Margin="0,0,0,16"><StackPanel>
        <TextBlock Text="✧  앱 업데이트" Style="{StaticResource SectionTitle}"/>
-       <TextBlock x:Name="UpdateVersion" Text="현재 버전 1.0.0"/>
+       <TextBlock x:Name="UpdateVersion" Text="현재 버전 확인 중"/>
        <CheckBox x:Name="AutoUpdateCheck" Content="새 버전 자동 확인 (6시간마다)" Click="SettingsChanged"/>
        <TextBlock x:Name="UpdateStatus" Text="업데이트 확인 전" Style="{StaticResource Caption}" Margin="0,4,0,6"/>
        <TextBlock x:Name="LastCheckLabel" Style="{StaticResource Caption}" Margin="0,0,0,10"/>

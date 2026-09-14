@@ -10,7 +10,7 @@ namespace MyMelody.App;
 // Explicit, isolated rendering harness; never uses the personal database or MIDI device.
 internal sealed class UiSmokeClock : TimeProvider
 {
-    private DateTimeOffset _now = DateTimeOffset.Now.AddDays(-14);
+    private DateTimeOffset _now = new(DateTime.Today.AddDays(-14).AddHours(8));
     private long _timestamp;
     public override DateTimeOffset GetUtcNow() => _now.ToUniversalTime();
     public override long GetTimestamp() => _timestamp;
@@ -34,6 +34,17 @@ internal static class UiSmoke
         }
         var current = manager.Draw();
         manager.StartManual(); clock.Advance(TimeSpan.FromHours(13)); manager.Tick(); manager.StopManual();
+        manager.NoteOn(); clock.Advance(TimeSpan.FromSeconds(23)); manager.Tick(); manager.Suspend();
+        clock.Advance(TimeSpan.FromMinutes(2));
+        manager.NoteOn(); clock.Advance(TimeSpan.FromSeconds(30)); manager.Tick();
+        var groupedAutomatic = manager.GetPracticeSessions().Where(s => s.Mode == PracticeMode.Automatic).ToList();
+        if (groupedAutomatic.Count != 1 || groupedAutomatic[0].PracticeSeconds != 53)
+            throw new InvalidDataException("Short practice intervals should display as one 53-second session.");
+        clock.Advance(TimeSpan.FromMinutes(30));
+        manager.NoteOn(); clock.Advance(TimeSpan.FromSeconds(5)); manager.Tick(); manager.Suspend();
+        if (manager.GetPracticeSessions().Count(s => s.Mode == PracticeMode.Automatic) != 2)
+            throw new InvalidDataException("A thirty-minute break must display a new session.");
+        checks.Add("23-second and30-second records share one53-second session; thirty-minute rest separates the next session without idle credit.");
         host.Main.Refresh();
         foreach (var page in new[] { "Home", "Collection", "Records", "Settings" })
         {

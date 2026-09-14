@@ -170,6 +170,9 @@ public sealed class PracticeManager : IDisposable
         .GroupBy(x => x.LocalDate).OrderBy(x => x.Key)
         .Select(x => new DailyPracticeStat(x.Key, x.Sum(s => s.PracticeSeconds), x.Sum(s => s.NoteCount))).ToArray();
 
+    /// <summary>Sessions for display; short gaps are grouped without crediting any break time.</summary>
+    public IReadOnlyList<PracticeSessionGroup> GetPracticeSessions() => PracticeSessionGrouping.Group(_sessions);
+
     public void Save()
     {
         ThrowIfDisposed(); Advance(); SaveCore(); Notify();

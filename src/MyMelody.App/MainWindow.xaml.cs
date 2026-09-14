@@ -149,7 +149,7 @@ public partial class MainWindow : Window
             CalendarGrid.Children.Add(button);
         }
         SessionsList.Children.Clear();
-        var sessions = Manager.Sessions.OrderByDescending(x => x.StartedAt).Where(x => _selectedDay == null || x.LocalDate == _selectedDay).ToList();
+        var sessions = Manager.GetPracticeSessions().OrderByDescending(x => x.StartedAt).Where(x => _selectedDay == null || x.LocalDate == _selectedDay).ToList();
         SessionEmpty.Visibility = sessions.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         SessionEmpty.Text = _selectedDay != null ? "선택한 날짜에는 연습 기록이 없어요. 날짜를 다시 누르면 전체 기록을 볼 수 있어요." : "첫 연습을 시작하면 여기에 기록이 남아요.";
         foreach (var session in sessions)
